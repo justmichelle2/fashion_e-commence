@@ -1,0 +1,28 @@
+{
+    "order":  {
+                  "id":  "35c2bdcc-b4c3-4a83-9944-0d8fe53c1da6",
+                  "status":  "requested",
+                  "progressStep":  "brief",
+                  "currency":  "USD",
+                  "paymentStatus":  "pending",
+                  "title":  "Custom Dress",
+                  "description":  "Need bespoke evening gown",
+                  "inspirationImages":  [
+                                            "https://example.com/reference.jpg"
+                                        ],
+                  "size":  "4",
+                  "colorPalette":  "black",
+                  "fabricPreference":  "silk",
+                  "shippingAddress":  "123 Fashion Ave",
+                  "customerId":  "051299c0-4171-495b-bfb7-bddb828dc5a4",
+                  "updatedAt":  "2025-11-17T11:57:21.037Z",
+                  "createdAt":  "2025-11-17T11:57:21.037Z",
+                  "notes":  null,
+                  "templateId":  null,
+                  "quoteCents":  null,
+                  "depositCents":  null,
+                  "estimatedDeliveryDays":  null,
+                  "trackingUrl":  null,
+                  "designerId":  null
+              }
+}

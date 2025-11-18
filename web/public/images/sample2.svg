@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="g2" x1="0" x2="1">
+      <stop offset="0%" stop-color="#e8f7ff" />
+      <stop offset="100%" stop-color="#eef9f6" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g2)" />
+  <g transform="translate(80,120)">
+    <rect x="0" y="0" width="440" height="640" rx="24" fill="#fff" opacity="0.9" />
+    <text x="40" y="80" font-size="48" fill="#111827" font-family="Arial">Tailored Blazer</text>
+  </g>
+</svg>

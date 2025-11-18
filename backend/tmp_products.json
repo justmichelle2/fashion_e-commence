@@ -1,0 +1,26 @@
+{
+    "products":  [
+                     {
+                         "id":  "b8bbd7cb-e65b-430a-b995-8ca5b1b553f1",
+                         "title":  "Silk Dress",
+                         "description":  "Elegant silk dress",
+                         "priceCents":  15000,
+                         "currency":  "USD",
+                         "images":  [
+
+                                    ],
+                         "tags":  [
+
+                                  ],
+                         "category":  "Dresses",
+                         "inventory":  10,
+                         "isFeatured":  false,
+                         "availability":  "made_to_order",
+                         "viewCount":  0,
+                         "averageRating":  0,
+                         "createdAt":  "2025-11-14T10:59:43.992Z",
+                         "updatedAt":  "2025-11-14T10:59:43.992Z",
+                         "designerId":  "5eed4ded-3d90-4d8a-a1cc-f76668dcb29b"
+                     }
+                 ]
+}

@@ -1,0 +1,6 @@
+
+> fashion-backend@0.1.0 start
+> node src/index.js
+
+Database connected
+Server running on port 5000 (bound to 0.0.0.0)

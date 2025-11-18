@@ -1,0 +1,23 @@
+{
+    "order":  {
+                  "id":  "115c3d5e-84eb-4300-81fb-135a4ad48b1a",
+                  "type":  "standard",
+                  "shippingCents":  0,
+                  "taxCents":  0,
+                  "currency":  "USD",
+                  "customerId":  "c97d2ecd-a9cc-4c0b-bbf1-df0f8fe56d1e",
+                  "status":  "cart",
+                  "items":  [
+
+                            ],
+                  "subtotalCents":  0,
+                  "totalCents":  0,
+                  "updatedAt":  "2025-11-17T12:01:58.275Z",
+                  "createdAt":  "2025-11-17T12:01:58.275Z",
+                  "paymentMethod":  null,
+                  "shippingAddress":  null,
+                  "notes":  null,
+                  "customOrderId":  null,
+                  "designerId":  null
+              }
+}

@@ -1,0 +1,41 @@
+{
+    "order":  {
+                  "id":  "115c3d5e-84eb-4300-81fb-135a4ad48b1a",
+                  "status":  "pending_payment",
+                  "type":  "standard",
+                  "items":  [
+                                {
+                                    "title":  "Silk Dress",
+                                    "currency":  "USD",
+                                    "quantity":  2,
+                                    "productId":  "b8bbd7cb-e65b-430a-b995-8ca5b1b553f1",
+                                    "designerId":  "5eed4ded-3d90-4d8a-a1cc-f76668dcb29b",
+                                    "priceCents":  15000
+                                }
+                            ],
+                  "subtotalCents":  30000,
+                  "shippingCents":  1500,
+                  "taxCents":  2400,
+                  "totalCents":  33900,
+                  "currency":  "USD",
+                  "paymentMethod":  "visa-4242",
+                  "shippingAddress":  "221B Baker Street, London NW1",
+                  "notes":  null,
+                  "customOrderId":  null,
+                  "createdAt":  "2025-11-17T12:01:58.275Z",
+                  "updatedAt":  "2025-11-17T12:02:29.257Z",
+                  "customerId":  "c97d2ecd-a9cc-4c0b-bbf1-df0f8fe56d1e",
+                  "designerId":  null,
+                  "customer":  {
+                                   "id":  "c97d2ecd-a9cc-4c0b-bbf1-df0f8fe56d1e",
+                                   "name":  "Alice Customer",
+                                   "email":  "customer@example.com"
+                               },
+                  "designer":  null,
+                  "customOrder":  null,
+                  "customerName":  "Alice Customer",
+                  "designerName":  null
+              },
+    "clientSecret":  "demo-client-secret",
+    "paymentGateway":  "stripe"
+}

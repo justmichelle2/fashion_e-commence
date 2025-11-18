@@ -1,0 +1,12 @@
+node_modules/
+.env
+.DS_Store
+build/
+.expo/
+/.expo/
+mobile/.expo/
+**/.expo/
+.expo-shared/
+web/.next/
+**/thumbs.db
+coverage/

@@ -1,0 +1,3 @@
+Expo web now works under SDK 54.
+Use `npx expo start --web` after installing dependencies to verify the build.
+

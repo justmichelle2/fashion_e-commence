@@ -1,0 +1,11 @@
+{
+  "watch": ["src"],
+  "ext": "js,json",
+  "ignore": [
+    "src/seed.js",
+    "src/create_db.js",
+    "uploads/*",
+    ".env"
+  ],
+  "delay": "250"
+}

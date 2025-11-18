@@ -1,0 +1,51 @@
+
+> fashion-web@0.1.0 dev
+> next dev
+
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can lea  ▲ Next.js 13.5.11
+  - Local:        http://localhost:3002
+  - Experiments (use at your own risk):
+     · typedRoutes
+
+ ✓ Ready in 7.5s
+  ▲ Next.js 13.5.11
+  - Local:        http://localhost:3001
+  - Experiments (use at your own risk):
+     · typedRoutes
+
+ ✓ Ready in 6.2s
+modules)
+ ✓ Compiled in 246ms (157 modules)
+ ✓ Compiled in 185ms (157 modules)
+ ✓ Compiled in 509ms (157 modules)
+ ✓ Compiled in 1548ms (204 modules)
+ ✓ Compiled in 256ms (204 modules)
+ ✓ Compiled in 250ms (157 modules)
+ ✓ Compiled in 187ms (157 modules)
+ ✓ Compiled in 7.2s (205 modules)
+  ▲ Next.js 13.5.11
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+  - Experiments (use at your own risk):
+     · typedRoutes
+
+ ✓ Ready in 7.7s
+57 modules)
+ ✓ Compiled in 200ms (157 modules)
+ ✓ Compiled in 7.6s (205 modules)
+  ▲ Next.js 13.5.11
+  - Local:        http://localhost:3001
+  - Environments: .env.local
+  - Experiments (use at your own risk):
+     · typedRoutes
+
+ ✓ Ready in 7.3s
+  ▲ Next.js 13.5.11
+  - Local:        http://localhost:3002
+  - Environments: .env.local
+  - Experiments (use at your own risk):
+     · typedRoutes
+
+ ✓ Ready in 5.8s
