@@ -1,0 +1,20 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "catalog": "Catálogo",
+    "designers": "Diseñadores",
+    "cart": "Carrito"
+  },
+  "hero": {
+    "headline": "Atelier de Lujo",
+    "subheading": "El mercado global para diseñadores de alta costura"
+  },
+  "actions": {
+    "shopNow": "Comprar ahora",
+    "discoverDesigners": "Descubrir diseñadores"
+  },
+  "common": {
+    "language": "Idioma",
+    "loading": "Cargando traducciones"
+  }
+}

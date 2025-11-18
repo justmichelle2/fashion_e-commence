@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "designers": "Designers",
+    "customOrders": "Custom Orders",
+    "profile": "Profile",
+    "cart": "Cart"
+  },
+  "hero": {
+    "headline": "Luxe Atelier",
+    "subheading": "Global fashion marketplace for premium designers"
+  },
+  "actions": {
+    "shopNow": "Shop now",
+    "discoverDesigners": "Discover designers",
+    "signIn": "Sign in"
+  },
+  "common": {
+    "language": "Language",
+    "loading": "Loading translations"
+  },
+  "home": {
+    "hero": {
+      "title": "Made-to-measure luxury, shipped globally",
+      "subtitle": "Connect with ateliers across continents, commission one-of-a-kind looks, and track every fitting in a single place.",
+      "primaryCta": "Explore catalog",
+      "secondaryCta": "Book a fitting"
+    },
+    "capsules": {
+      "title": "The latest capsule drops",
+      "description": "Fresh edits added every Thursday"
+    }
+  }
+}

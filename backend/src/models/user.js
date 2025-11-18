@@ -14,6 +14,7 @@ module.exports = (sequelize) => {
   phoneNumber: { type: DataTypes.STRING },
   location: { type: DataTypes.STRING },
   preferredCurrency: { type: DataTypes.STRING, defaultValue: 'USD' },
+  preferredLocale: { type: DataTypes.STRING, defaultValue: 'en' },
   preferredSize: { type: DataTypes.STRING },
   measurementProfile: { type: DataTypes.JSONB, defaultValue: {} },
   notificationPrefs: { type: DataTypes.JSONB, defaultValue: { email: true, sms: false, push: true } },

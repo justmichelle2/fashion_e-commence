@@ -14,6 +14,8 @@ const Order = require('./order')(sequelize);
 const OrderAuditLog = require('./orderAuditLog')(sequelize);
 const ChatMessage = require('./chatMessage')(sequelize);
 const DesignerTemplate = require('./designerTemplate')(sequelize);
+const DesignerPortfolio = require('./designerPortfolio')(sequelize);
+const Inspiration = require('./inspiration')(sequelize);
 
 // Associations
 User.hasMany(Product, { as: 'products', foreignKey: 'designerId' });
@@ -39,4 +41,10 @@ DesignerTemplate.belongsTo(User, { as: 'designer', foreignKey: 'designerId' });
 DesignerTemplate.hasMany(CustomOrder, { as: 'orders', foreignKey: 'templateId' });
 CustomOrder.belongsTo(DesignerTemplate, { as: 'template', foreignKey: 'templateId' });
 
-module.exports = { sequelize, User, Product, CustomOrder, Review, Order, ChatMessage, DesignerTemplate, OrderAuditLog };
+User.hasMany(DesignerPortfolio, { as: 'portfolios', foreignKey: 'designerId' });
+DesignerPortfolio.belongsTo(User, { as: 'designer', foreignKey: 'designerId' });
+
+User.hasMany(Inspiration, { as: 'inspirations', foreignKey: 'userId' });
+Inspiration.belongsTo(User, { as: 'owner', foreignKey: 'userId' });
+
+module.exports = { sequelize, User, Product, CustomOrder, Review, Order, ChatMessage, DesignerTemplate, OrderAuditLog, DesignerPortfolio, Inspiration };

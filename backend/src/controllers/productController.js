@@ -1,5 +1,7 @@
 const { Product, User } = require('../models');
 const { Op } = require('sequelize');
+const { upload } = require('../utils/upload');
+const { validate, schemas } = require('../utils/validators');
 
 async function listProducts(req, res){
   const {
@@ -38,24 +40,93 @@ async function getProduct(req, res){
   res.json({ product: p });
 }
 
+function normalizeStringArray(value){
+  if(Array.isArray(value)) return value.map(String).map((v) => v.trim()).filter(Boolean)
+  if(typeof value === 'string'){
+    const trimmed = value.trim()
+    if(!trimmed) return []
+    if(trimmed.startsWith('[')){
+      try{
+        const parsed = JSON.parse(trimmed)
+        if(Array.isArray(parsed)) return parsed.map(String).map((v) => v.trim()).filter(Boolean)
+      }catch(err){ /* ignore */ }
+    }
+    return trimmed.split(',').map((segment) => segment.trim()).filter(Boolean)
+  }
+  return []
+}
+
+function extractArrayField(req, field){
+  if(Object.prototype.hasOwnProperty.call(req.body || {}, field)){
+    return normalizeStringArray(req.body[field])
+  }
+  const multiField = `${field}[]`
+  if(Object.prototype.hasOwnProperty.call(req.body || {}, multiField)){
+    return normalizeStringArray(req.body[multiField])
+  }
+  return undefined
+}
+
+function collectUploadedPaths(files = []){
+  return files.map((file) => `/uploads/${file.filename}`)
+}
+
+function dedupe(arr = []){
+  return Array.from(new Set(arr.filter(Boolean)))
+}
+
 async function createProduct(req, res){
-  const body = req.body;
-  if(!req.user || req.user.role !== 'designer') return res.status(403).json({ error: 'Forbidden' });
-  const product = await Product.create({ ...body, designerId: req.user.id });
-  res.json({ product });
+  if(!req.user || req.user.role !== 'designer') return res.status(403).json({ error: 'Forbidden' })
+
+  const payload = { ...req.body }
+  if(payload.priceCents !== undefined) payload.priceCents = Number(payload.priceCents)
+
+  const tags = extractArrayField(req, 'tags')
+  if(tags !== undefined) payload.tags = tags
+
+  const parsed = validate(schemas.productCreate, payload)
+  if(parsed.error) return res.status(400).json({ error: parsed.error })
+
+  const bodyImages = extractArrayField(req, 'images') || []
+  const uploadedImages = collectUploadedPaths(req.files)
+  const images = dedupe([...bodyImages, ...uploadedImages])
+
+  const product = await Product.create({
+    ...parsed.data,
+    designerId: req.user.id,
+    images,
+  })
+  res.json({ product })
 }
 
 async function updateProduct(req, res){
-  if(!req.user || req.user.role !== 'designer') return res.status(403).json({ error: 'Forbidden' });
-  const product = await Product.findByPk(req.params.id);
-  if(!product) return res.status(404).json({ error: 'Not found' });
-  if(product.designerId !== req.user.id) return res.status(403).json({ error: 'Not yours' });
-  const fields = ['title','description','priceCents','currency','images','tags','category','inventory','isFeatured','availability'];
-  fields.forEach(key => {
-    if(req.body[key] !== undefined) product[key] = req.body[key];
-  });
-  await product.save();
-  res.json({ product });
+  if(!req.user || req.user.role !== 'designer') return res.status(403).json({ error: 'Forbidden' })
+  const product = await Product.findByPk(req.params.id)
+  if(!product) return res.status(404).json({ error: 'Not found' })
+  if(product.designerId !== req.user.id) return res.status(403).json({ error: 'Not yours' })
+
+  const payload = { ...req.body }
+  if(payload.priceCents !== undefined) payload.priceCents = Number(payload.priceCents)
+  const tags = extractArrayField(req, 'tags')
+  if(tags !== undefined) payload.tags = tags
+
+  const parsed = validate(schemas.productUpdate, payload)
+  if(parsed.error) return res.status(400).json({ error: parsed.error })
+
+  Object.assign(product, parsed.data)
+
+  const removeImages = extractArrayField(req, 'removeImages') || []
+  const bodyImages = extractArrayField(req, 'images') || []
+  const uploadImages = collectUploadedPaths(req.files)
+
+  if(removeImages.length || bodyImages.length || uploadImages.length){
+    let nextImages = Array.isArray(product.images) ? product.images.filter((img) => !removeImages.includes(img)) : []
+    nextImages = dedupe([...nextImages, ...bodyImages, ...uploadImages])
+    product.images = nextImages
+  }
+
+  await product.save()
+  res.json({ product })
 }
 
 // simple endpoint to get trending products

@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const { UniqueConstraintError, ValidationError } = require('sequelize');
 const config = require('../config/config');
 
-const PROFILE_ATTRIBUTES = ['id','email','name','role','bio','verified','portfolioUrl','location','phoneNumber','styleNotes','pronouns'];
-const MUTABLE_PROFILE_FIELDS = ['name','phoneNumber','location','styleNotes','pronouns'];
+const PROFILE_ATTRIBUTES = ['id','email','name','role','bio','verified','portfolioUrl','location','phoneNumber','styleNotes','pronouns','preferredLocale'];
+const MUTABLE_PROFILE_FIELDS = ['name','phoneNumber','location','styleNotes','pronouns','preferredLocale'];
 
 async function register(req, res){
   try{
@@ -21,7 +21,7 @@ async function register(req, res){
     await user.setPassword(password);
     await user.save();
     const token = jwt.sign({ id: user.id, role: user.role }, config.jwtSecret, { expiresIn: '30d' });
-    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } });
+    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role, preferredLocale: user.preferredLocale } });
   }catch(err){
     if(err instanceof UniqueConstraintError || err?.name === 'SequelizeUniqueConstraintError'){
       return res.status(400).json({ error: 'Email already used' });
@@ -43,7 +43,7 @@ async function login(req, res){
     const ok = await user.validatePassword(password);
     if(!ok) return res.status(401).json({ error: 'Invalid credentials' });
     const token = jwt.sign({ id: user.id, role: user.role }, config.jwtSecret, { expiresIn: '30d' });
-    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } });
+    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role, preferredLocale: user.preferredLocale } });
   }catch(err){
     console.error('Login failed', err);
     res.status(500).json({ error: 'Internal server error' });

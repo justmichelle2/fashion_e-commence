@@ -10,6 +10,7 @@ const orderRoutes = require('./routes/orders');
 const chatRoutes = require('./routes/chat');
 const dashboardRoutes = require('./routes/dashboard');
 const templateRoutes = require('./routes/templates');
+const localeRoutes = require('./routes/locales');
 
 const app = express();
 app.use(cors());
@@ -26,6 +27,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/templates', templateRoutes);
+app.use('/api/locales', localeRoutes);
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 

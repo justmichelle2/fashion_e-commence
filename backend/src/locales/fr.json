@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "catalog": "Catalogue",
+    "designers": "Créateurs",
+    "customOrders": "Commandes sur mesure",
+    "profile": "Profil",
+    "cart": "Panier"
+  },
+  "hero": {
+    "headline": "Atelier de Luxe",
+    "subheading": "Place de marché mondiale pour les créateurs d'exception"
+  },
+  "actions": {
+    "shopNow": "Découvrir",
+    "discoverDesigners": "Voir les créateurs",
+    "signIn": "Connexion"
+  },
+  "common": {
+    "language": "Langue",
+    "loading": "Chargement des traductions"
+  }
+}

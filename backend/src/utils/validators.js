@@ -21,6 +21,35 @@ const checkoutSchema = z.object({
   paymentMethod: z.string().min(2).max(120),
 })
 
+const stringArray = z.array(z.string().min(1).max(120)).max(20)
+
+const productCreateSchema = z.object({
+  title: z.string().min(3).max(160),
+  description: z.string().max(4000).optional().default(''),
+  priceCents: z.coerce.number().int().min(1000),
+  currency: z.string().min(2).max(6).optional().default('USD'),
+  category: z.string().max(120).optional(),
+  tags: stringArray.optional().default([]),
+  availability: z.enum(['in_stock', 'made_to_order', 'preorder']).optional(),
+})
+
+const productUpdateSchema = productCreateSchema.partial()
+
+const designerPortfolioCreateSchema = z.object({
+  title: z.string().min(3).max(160),
+  description: z.string().max(2000).optional(),
+  images: stringArray.optional().default([]),
+})
+
+const designerPortfolioUpdateSchema = designerPortfolioCreateSchema.partial()
+
+const inspirationCreateSchema = z.object({
+  title: z.string().min(3).max(160),
+  description: z.string().max(2000).optional(),
+  visibility: z.enum(['private', 'public']).optional().default('public'),
+  media: stringArray.optional().default([]),
+})
+
 const customOrderCreateSchema = z.object({
   title: z.string().min(3).max(160),
   description: z.string().min(3).max(2000).optional(),
@@ -77,6 +106,11 @@ module.exports = {
     cartAdd: cartAddSchema,
     cartRemove: cartRemoveSchema,
     checkout: checkoutSchema,
+    productCreate: productCreateSchema,
+    productUpdate: productUpdateSchema,
+    designerPortfolioCreate: designerPortfolioCreateSchema,
+    designerPortfolioUpdate: designerPortfolioUpdateSchema,
+    inspirationCreate: inspirationCreateSchema,
     customOrderCreate: customOrderCreateSchema,
     customOrderRespond: customOrderRespondSchema,
     customOrderStatus: customOrderStatusSchema,
