@@ -8,8 +8,10 @@ const STORAGE_KEY = 'luxe-theme'
 function getPreferredTheme(defaultTheme = 'dark') {
   if (typeof window === 'undefined') return defaultTheme
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored === 'light' || stored === 'dark') return stored
+    const stored = window.localStorage.getItem(STORAGE_KEY)
+    if (stored === 'light' || stored === 'dark') {
+      return stored
+    }
   } catch (err) {
     // ignore storage errors
   }
@@ -20,16 +22,15 @@ function getPreferredTheme(defaultTheme = 'dark') {
 }
 
 export function ThemeProvider({ children, defaultTheme = 'dark' }) {
-  const [theme, setTheme] = useState(defaultTheme)
-  const [mounted, setMounted] = useState(false)
+  const [theme, setTheme] = useState(() => getPreferredTheme(defaultTheme))
 
   useEffect(() => {
-    setTheme(getPreferredTheme(defaultTheme))
-    setMounted(true)
+    const nextTheme = getPreferredTheme(defaultTheme)
+    setTheme((current) => (current === nextTheme ? current : nextTheme))
   }, [defaultTheme])
 
   useEffect(() => {
-    if (!mounted) return
+    if (typeof document === 'undefined') return
     const root = document.documentElement
     root.dataset.theme = theme
     if (theme === 'dark') {
@@ -38,16 +39,19 @@ export function ThemeProvider({ children, defaultTheme = 'dark' }) {
       root.classList.remove('dark')
     }
     try {
-      localStorage.setItem(STORAGE_KEY, theme)
+      window.localStorage.setItem(STORAGE_KEY, theme)
     } catch (err) {
       // ignore storage write failures
     }
-  }, [theme, mounted])
+  }, [theme])
 
-  const value = useMemo(() => ({
-    theme,
-    toggleTheme: () => setTheme((current) => (current === 'dark' ? 'light' : 'dark')),
-  }), [theme])
+  const value = useMemo(
+    () => ({
+      theme,
+      toggleTheme: () => setTheme((current) => (current === 'dark' ? 'light' : 'dark')),
+    }),
+    [theme],
+  )
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }

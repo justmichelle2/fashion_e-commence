@@ -3,6 +3,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useSession } from './SessionProvider'
 
+const DEFAULT_LOCALES = [
+  { code: 'en', label: 'English' },
+  { code: 'fr', label: 'Français' },
+  { code: 'es', label: 'Español' },
+]
+
 const LocaleContext = createContext({
   locale: 'en',
   defaultLocale: 'en',
@@ -61,7 +67,7 @@ export function LocaleProvider({ children }) {
   const { user, token } = useSession()
   const [locale, setLocale] = useState('en')
   const [defaultLocale, setDefaultLocale] = useState('en')
-  const [availableLocales, setAvailableLocales] = useState([{ code: 'en', label: 'English' }])
+  const [availableLocales, setAvailableLocales] = useState(DEFAULT_LOCALES)
   const [messages, setMessages] = useState({})
   const [status, setStatus] = useState('loading')
 
@@ -72,7 +78,7 @@ export function LocaleProvider({ children }) {
         const res = await fetch('/api/locales', { headers: { Accept: 'application/json' } })
         const data = await res.json()
         if (cancelled) return
-        const localesList = Array.isArray(data.locales) && data.locales.length > 0 ? data.locales : availableLocales
+        const localesList = Array.isArray(data.locales) && data.locales.length > 0 ? data.locales : DEFAULT_LOCALES
         const fallback = normalizeLocale(data.defaultLocale) || 'en'
         setAvailableLocales(localesList)
         setDefaultLocale(fallback)
@@ -85,7 +91,7 @@ export function LocaleProvider({ children }) {
       } catch (err) {
         if (!cancelled) {
           console.warn('Locale metadata fetch failed', err)
-          setAvailableLocales([{ code: 'en', label: 'English' }])
+          setAvailableLocales(DEFAULT_LOCALES)
           setDefaultLocale('en')
         }
       }

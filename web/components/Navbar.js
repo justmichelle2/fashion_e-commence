@@ -28,6 +28,25 @@ function LocaleSwitcher({ locale, locales, label, onChange }) {
         <select
           className="appearance-none rounded-full border border-border/50 bg-card/60 px-4 py-1 text-sm font-semibold uppercase tracking-[0.3em]"
           value={locale}
+
+function CartIcon({ className = 'h-4 w-4' }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <circle cx="9" cy="21" r="1.4" />
+      <circle cx="18" cy="21" r="1.4" />
+      <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H7" />
+    </svg>
+  )
+}
           onChange={handleChange}
         >
           {locales.map((entry) => (
@@ -68,7 +87,8 @@ export default function Navbar() {
       <Link href="/login" className="btn-secondary">
         {t('actions.signIn', 'Sign in')}
       </Link>
-      <Link href="/cart" className="btn-primary">
+      <Link href="/cart" className="btn-primary gap-3">
+        <CartIcon />
         {t('nav.cart', 'Cart')}
       </Link>
     </div>
@@ -128,7 +148,8 @@ export default function Navbar() {
               <Link href="/login" className="btn-secondary w-1/2 text-center" onClick={() => setOpen(false)}>
                 {t('actions.signIn', 'Sign in')}
               </Link>
-              <Link href="/cart" className="btn-primary w-1/2 text-center" onClick={() => setOpen(false)}>
+              <Link href="/cart" className="btn-primary w-1/2 text-center gap-2" onClick={() => setOpen(false)}>
+                <CartIcon className="mx-auto h-4 w-4" />
                 {t('nav.cart', 'Cart')}
               </Link>
             </div>
