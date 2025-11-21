@@ -26,6 +26,10 @@
 	--input-placeholder: rgba(255,255,255,0.6);
 	--skeleton-soft: rgba(255,255,255,0.06);
 	--skeleton-strong: rgba(255,255,255,0.12);
+	--btn-secondary-bg: rgba(138,92,247,0.22);
+	--btn-secondary-border: rgba(138,92,247,0.55);
+	--btn-secondary-color: #f8f5ff;
+	--btn-secondary-hover: rgba(138,92,247,0.32);
 }
 
 [data-theme='light']{
@@ -49,6 +53,10 @@
 	--input-placeholder: rgba(12,12,12,0.45);
 	--skeleton-soft: rgba(0,0,0,0.04);
 	--skeleton-strong: rgba(0,0,0,0.12);
+	--btn-secondary-bg: rgba(138,92,247,0.16);
+	--btn-secondary-border: rgba(138,92,247,0.42);
+	--btn-secondary-color: #2b0f4f;
+	--btn-secondary-hover: rgba(138,92,247,0.26);
 }
 
 @layer base{
@@ -171,9 +179,17 @@
 	font-size: 0.85rem;
 	font-weight: 500;
 	letter-spacing: 0.08em;
-	background: transparent;
-	border: 1px solid var(--card-border);
-	color: var(--text-color);
+	background: var(--btn-secondary-bg);
+	border: 1px solid var(--btn-secondary-border);
+	color: var(--btn-secondary-color);
+	box-shadow: 0 8px 20px rgba(15,15,15,0.18);
+	transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.btn-secondary:hover{
+	background: var(--btn-secondary-hover);
+	transform: translateY(-1px);
+	box-shadow: 0 12px 26px rgba(15,15,15,0.22);
 }
 
 .fade-in{ animation: fadeIn 420ms ease both; }
