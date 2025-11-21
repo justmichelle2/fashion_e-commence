@@ -11,6 +11,15 @@ import { useSession } from '../../../components/SessionProvider'
 import { useAuthedSWR } from '../../../hooks/useAuthedSWR'
 import { formatMoney } from '../../lib/price'
 
+const EMPTY_ORDER = {
+  items: [],
+  subtotalCents: 0,
+  taxCents: 0,
+  shippingCents: 0,
+  totalCents: 0,
+  currency: 'USD',
+}
+
 function SummaryCard({ order, isProcessing }) {
   const currency = order?.currency || 'USD'
   const subtotal = order?.subtotalCents || 0
@@ -51,9 +60,18 @@ export default function CartExperience() {
   const { status, token } = useSession()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { data, isLoading, error, mutate } = useAuthedSWR('/api/orders/cart')
+  const rawOrder = data?.order
 
-  const order = data?.order ?? { items: [], subtotalCents: 0, totalCents: 0, currency: 'USD' }
-  const items = order.items || []
+  const order = useMemo(() => {
+    if (!rawOrder) return EMPTY_ORDER
+    return {
+      ...EMPTY_ORDER,
+      ...rawOrder,
+      items: rawOrder.items ?? [],
+    }
+  }, [rawOrder])
+
+  const items = order.items
 
   const handleRemove = useCallback(
     async (productId) => {
@@ -71,10 +89,8 @@ export default function CartExperience() {
     [token, mutate],
   )
 
-  const totalsCopy = useMemo(() => {
-    if (!order?.items?.length) return 'Cart empty'
-    return `${order.items.length} ${order.items.length === 1 ? 'piece' : 'pieces'}`
-  }, [order])
+  const itemCount = items.length
+  const totalsCopy = itemCount === 0 ? 'Cart empty' : `${itemCount} ${itemCount === 1 ? 'piece' : 'pieces'}`
 
   if (status === 'idle' || status === 'loading' || isLoading) {
     return (

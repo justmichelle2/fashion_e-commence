@@ -3,18 +3,29 @@
     "home": "Inicio",
     "catalog": "Catálogo",
     "designers": "Diseñadores",
+    "customOrders": "Pedidos a medida",
+    "profile": "Perfil",
     "cart": "Carrito"
-  },
-  "hero": {
-    "headline": "Atelier de Lujo",
-    "subheading": "El mercado global para diseñadores de alta costura"
   },
   "actions": {
     "shopNow": "Comprar ahora",
-    "discoverDesigners": "Descubrir diseñadores"
+    "discoverDesigners": "Descubrir diseñadores",
+    "signIn": "Iniciar sesión"
   },
   "common": {
     "language": "Idioma",
     "loading": "Cargando traducciones"
+  },
+  "home": {
+    "hero": {
+      "title": "Alta costura a medida enviada al mundo",
+      "subtitle": "Conecta con ateliers de todos los continentes y controla cada prueba en un único lugar.",
+      "primaryCta": "Explorar catálogo",
+      "secondaryCta": "Reservar una prueba"
+    },
+    "capsules": {
+      "title": "Últimos lanzamientos cápsula",
+      "description": "Nuevas ediciones cada jueves"
+    }
   }
 }

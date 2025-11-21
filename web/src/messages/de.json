@@ -1,0 +1,211 @@
+{
+  "app": {
+    "name": "LUXE Atelier"
+  },
+  "nav": {
+    "home": "Start",
+    "catalog": "Katalog",
+    "designers": "Designer",
+    "customOrders": "Individuelle Aufträge",
+    "profile": "Profil",
+    "cart": "Warenkorb",
+    "language": "Sprache",
+    "menu": "Menü"
+  },
+  "buttons": {
+    "exploreCatalog": "Katalog entdecken",
+    "bookFitting": "Anprobe buchen",
+    "signIn": "Anmelden",
+    "viewAll": "Alle ansehen",
+    "reserveLook": "Look reservieren",
+    "book": "Buchen",
+    "view": "Ansehen",
+    "addToCart": "In den Warenkorb",
+    "viewProduct": "Produkt ansehen"
+  },
+  "hero": {
+    "title": "Maßgefertigter Luxus weltweit geliefert",
+    "subtitle": "Verbinden Sie sich mit Ateliers auf allen Kontinenten und verfolgen Sie jede Anprobe an einem Ort.",
+    "primaryCta": "Katalog entdecken",
+    "secondaryCta": "Fitting buchen"
+  },
+  "Home": {
+    "stats": {
+      "ateliers": {
+        "label": "Ateliers weltweit",
+        "value": "120+",
+        "detail": "28 Modehauptstädte"
+      },
+      "fittings": {
+        "label": "Anproben/Monat",
+        "value": "1,4K",
+        "detail": "Live-Concierge"
+      },
+      "leadTime": {
+        "label": "Durchschnittliche Lieferzeit",
+        "value": "9 Tage",
+        "detail": "Priorisierte Produktion"
+      },
+      "netZero": {
+        "label": "Netto-null-Partner",
+        "value": "68",
+        "detail": "Zertifizierte Lieferkette"
+      }
+    },
+    "capsules": {
+      "title": "Neueste Capsule-Drops",
+      "description": "Frische Edits jeden Donnerstag"
+    },
+    "categories": {
+      "title": "Kategorie-Stimmungen",
+      "description": "Concierge-Styling, Atelierbesuche und White-Glove-Lieferung",
+      "items": {
+        "eveningwear": {
+          "title": "Abendmode",
+          "blurb": "Schrägschnitt-Seide, strukturierte Korsagen, leuchtende Stickereien."
+        },
+        "tailoring": {
+          "title": "Tailoring",
+          "blurb": "Architektonische Anzüge und elegante Day-to-Night-Looks."
+        },
+        "resort": {
+          "title": "Resort",
+          "blurb": "Leichte Leinen und öko-gefärbte Paletten für Vielreisende."
+        },
+        "accessories": {
+          "title": "Accessoires",
+          "blurb": "Limitierte Taschen, skulpturale Schmuckstücke, Couture-Schuhe."
+        }
+      }
+    },
+    "experiences": {
+      "title": "Erlebnisse",
+      "description": "Immersive Drops, Concierge-Sourcing, maßgeschneiderte Anproben",
+      "items": {
+        "trunkshow": {
+          "title": "Designer-Trunkshows",
+          "summary": "Live aus Lagos, Paris und Seoul mit Echtzeit-Chat."
+        },
+        "fittings": {
+          "title": "3D-Anproben",
+          "summary": "Prüfen Sie Anpassungen direkt auf maßstabsgetreuen Renders."
+        },
+        "concierge": {
+          "title": "Concierge-Sourcing",
+          "summary": "Uploaden Sie Moodboards, wir finden Archivstoffe in 48h."
+        }
+      },
+      "featuredLabel": "Im Fokus"
+    },
+    "designers": {
+      "title": "Resident Designers",
+      "description": "Lernen Sie die Ateliers des modernen Luxus kennen"
+    },
+    "testimonials": {
+      "title": "Erfahrungsberichte",
+      "description": "Geschichten unserer Kundschaft",
+      "items": {
+        "ama": {
+          "quote": "„Chat und 3D-Anprobe – keine Überraschungen, mein Kleid war perfekt.“",
+          "author": "Ama T., Lagos"
+        },
+        "leila": {
+          "quote": "„Dank Concierge-Sourcing entstand ein 90er-Archivkleid in drei Wochen.“",
+          "author": "Leila M., Dubai"
+        },
+        "jonas": {
+          "quote": "„Designer laden Skizzen direkt in meine Kundenboards.“",
+          "author": "Jonas P., NYC"
+        }
+      }
+    }
+  },
+  "products": {
+    "sampleTitle": "Beispielprodukt",
+    "category": "Capsule",
+    "availability": "Auf Bestellung gefertigt"
+  },
+  "theme": {
+    "toggle": "Theme wechseln",
+    "day": "Tag",
+    "night": "Nacht",
+    "label": "Thema"
+  },
+  "forms": {
+    "search": "Suchen",
+    "email": "E-Mail-Adresse"
+  },
+  "footer": {
+    "crafted": "Mit Sorgfalt gefertigt • Globale Ateliers & maßgeschneiderte Erlebnisse",
+    "terms": "AGB",
+    "privacy": "Datenschutz"
+  },
+  "errors": {
+    "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+    "offline": "Verbindung zum Ateliernetzwerk nicht möglich."
+  },
+  "common": {
+    "language": "Sprache",
+    "mode": "Modus"
+  },
+  "actions": {
+    "signIn": "Anmelden",
+    "viewWorkspace": "Workspace anzeigen",
+    "openChat": "Chat öffnen"
+  },
+  "designers": {
+    "card": {
+      "placeholderName": "Designer",
+      "placeholderBio": "Zeitgenössische Schneiderei & veredelte Basics",
+      "tags": {
+        "readyToWear": "Ready-to-wear",
+        "bespoke": "Maßanfertigung"
+      }
+    }
+  },
+  "orders": {
+    "card": {
+      "title": "Maßanfertigung",
+      "descriptionPlaceholder": "Warten auf Designer-Notizen",
+      "budget": "Budget",
+      "paymentStatus": "Zahlungsstatus",
+      "designerReminder": "Neues Briefing wartet auf dein Angebot."
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "requested": "Brief eingegangen",
+      "quoted": "Angebot gesendet",
+      "inProgress": "In Arbeit",
+      "inProduction": "In Produktion",
+      "delivered": "Geliefert",
+      "completed": "Abgeschlossen",
+      "rejected": "Abgelehnt"
+    },
+    "timeline": {
+      "requested": {
+        "label": "Brief eingereicht",
+        "description": "Der Kunde teilte Inspiration und Anforderungen."
+      },
+      "quoted": {
+        "label": "Angebot gesendet",
+        "description": "Der Designer prüfte alles und sandte Preise."
+      },
+      "inProgress": {
+        "label": "In Arbeit",
+        "description": "Skizzen, Fittings und Chats laufen."
+      },
+      "inProduction": {
+        "label": "In Produktion",
+        "description": "Das Atelier fertigt das Kleidungsstück."
+      },
+      "delivered": {
+        "label": "Geliefert",
+        "description": "Das Stück kam mit Concierge-Qualitätscheck an."
+      },
+      "completed": {
+        "label": "Abgeschlossen",
+        "description": "Projekt abgeschlossen und archiviert."
+      }
+    }
+  }
+}

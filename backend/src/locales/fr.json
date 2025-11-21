@@ -7,10 +7,6 @@
     "profile": "Profil",
     "cart": "Panier"
   },
-  "hero": {
-    "headline": "Atelier de Luxe",
-    "subheading": "Place de marché mondiale pour les créateurs d'exception"
-  },
   "actions": {
     "shopNow": "Découvrir",
     "discoverDesigners": "Voir les créateurs",
@@ -19,5 +15,17 @@
   "common": {
     "language": "Langue",
     "loading": "Chargement des traductions"
+  },
+  "home": {
+    "hero": {
+      "title": "Luxe sur mesure livré partout",
+      "subtitle": "Reliez-vous aux ateliers du monde entier et suivez chaque essayage depuis un seul espace.",
+      "primaryCta": "Explorer le catalogue",
+      "secondaryCta": "Réserver un essayage"
+    },
+    "capsules": {
+      "title": "Les dernières capsules",
+      "description": "Nouvelles sélections chaque jeudi"
+    }
   }
 }

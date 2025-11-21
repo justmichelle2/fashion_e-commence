@@ -1,0 +1,211 @@
+{
+  "app": {
+    "name": "LUXE Atelier"
+  },
+  "nav": {
+    "home": "ホーム",
+    "catalog": "カタログ",
+    "designers": "デザイナー",
+    "customOrders": "オーダーメイド",
+    "profile": "プロフィール",
+    "cart": "カート",
+    "language": "言語",
+    "menu": "メニュー"
+  },
+  "buttons": {
+    "exploreCatalog": "カタログを見る",
+    "bookFitting": "フィッティング予約",
+    "signIn": "サインイン",
+    "viewAll": "すべて表示",
+    "reserveLook": "ルックを予約",
+    "book": "予約",
+    "view": "見る",
+    "addToCart": "カートに追加",
+    "viewProduct": "商品を見る"
+  },
+  "hero": {
+    "title": "世界へ届けるオーダーメイドラグジュアリー",
+    "subtitle": "世界中のアトリエとつながり、すべてのフィッティングを一元管理。",
+    "primaryCta": "カタログを見る",
+    "secondaryCta": "フィッティングを予約"
+  },
+  "Home": {
+    "stats": {
+      "ateliers": {
+        "label": "世界のアトリエ",
+        "value": "120+",
+        "detail": "28のファッション都市"
+      },
+      "fittings": {
+        "label": "月間フィッティング",
+        "value": "1.4K",
+        "detail": "ライブコンシェルジュ"
+      },
+      "leadTime": {
+        "label": "平均リードタイム",
+        "value": "9日",
+        "detail": "優先生産"
+      },
+      "netZero": {
+        "label": "ネットゼロパートナー",
+        "value": "68",
+        "detail": "認証サプライチェーン"
+      }
+    },
+    "capsules": {
+      "title": "最新カプセルコレクション",
+      "description": "毎週木曜に新作を追加"
+    },
+    "categories": {
+      "title": "カテゴリー別ムード",
+      "description": "コンシェルジュスタイリング、アトリエ訪問、上質な配送",
+      "items": {
+        "eveningwear": {
+          "title": "イブニング",
+          "blurb": "バイアスシルク、構築的なコルセット、光るビーズワーク。"
+        },
+        "tailoring": {
+          "title": "テーラリング",
+          "blurb": "建築的なスーツとデイ・トゥ・ナイトの装い。"
+        },
+        "resort": {
+          "title": "リゾート",
+          "blurb": "軽やかなリネンとエコ染色パレット。"
+        },
+        "accessories": {
+          "title": "アクセサリー",
+          "blurb": "数量限定バッグ、彫刻的ジュエリー、クチュールシューズ。"
+        }
+      }
+    },
+    "experiences": {
+      "title": "体験",
+      "description": "没入型ドロップ、コンシェルジュソーシング、特別フィッティング",
+      "items": {
+        "trunkshow": {
+          "title": "トランクショー",
+          "summary": "ラゴス・パリ・ソウルをリアルタイム配信。"
+        },
+        "fittings": {
+          "title": "3Dフィッティング",
+          "summary": "実寸レンダー上で調整を承認。"
+        },
+        "concierge": {
+          "title": "コンシェルジュ調達",
+          "summary": "リファレンスをアップロードし48時間でアーカイブ生地を調達。"
+        }
+      },
+      "featuredLabel": "特集"
+    },
+    "designers": {
+      "title": "レジデントデザイナー",
+      "description": "現代ラグジュアリーを形作るアトリエを紹介"
+    },
+    "testimonials": {
+      "title": "お客様の声",
+      "description": "世界中のクライアントストーリー",
+      "items": {
+        "ama": {
+          "quote": "「チャットと3Dフィッティングで驚きゼロ。ドレスは完璧でした。」",
+          "author": "Ama T., ラゴス"
+        },
+        "leila": {
+          "quote": "「コンシェルジュが3週間でアーカイブドレスを再現。」",
+          "author": "Leila M., ドバイ"
+        },
+        "jonas": {
+          "quote": "「デザイナーがスケッチを直接ボードに共有。」",
+          "author": "Jonas P., NYC"
+        }
+      }
+    }
+  },
+  "products": {
+    "sampleTitle": "サンプル商品",
+    "category": "カプセル",
+    "availability": "受注生産"
+  },
+  "theme": {
+    "toggle": "テーマ切替",
+    "day": "デイ",
+    "night": "ナイト",
+    "label": "テーマ"
+  },
+  "forms": {
+    "search": "検索",
+    "email": "メールアドレス"
+  },
+  "footer": {
+    "crafted": "丁寧に仕立てる • 世界のアトリエと特別な体験",
+    "terms": "利用規約",
+    "privacy": "プライバシー"
+  },
+  "errors": {
+    "generic": "エラーが発生しました。再度お試しください。",
+    "offline": "アトリエネットワークに接続できません。"
+  },
+  "common": {
+    "language": "言語",
+    "mode": "モード"
+  },
+  "actions": {
+    "signIn": "サインイン",
+    "viewWorkspace": "ワークスペースを見る",
+    "openChat": "チャットを開く"
+  },
+  "designers": {
+    "card": {
+      "placeholderName": "デザイナー",
+      "placeholderBio": "コンテンポラリーなテーラリングと洗練されたベーシック",
+      "tags": {
+        "readyToWear": "プレタポルテ",
+        "bespoke": "ビスポーク"
+      }
+    }
+  },
+  "orders": {
+    "card": {
+      "title": "カスタムオーダー",
+      "descriptionPlaceholder": "デザイナーのメモ待ち",
+      "budget": "予算",
+      "paymentStatus": "支払い状況",
+      "designerReminder": "新しいブリーフがあなたの見積りを待っています。"
+    },
+    "status": {
+      "pending": "保留中",
+      "requested": "ブリーフ受領",
+      "quoted": "見積り送信済み",
+      "inProgress": "進行中",
+      "inProduction": "製作中",
+      "delivered": "納品済み",
+      "completed": "完了",
+      "rejected": "却下"
+    },
+    "timeline": {
+      "requested": {
+        "label": "ブリーフ送信",
+        "description": "クライアントがインスピレーションと要件を共有しました。"
+      },
+      "quoted": {
+        "label": "見積り送信",
+        "description": "デザイナーが確認し、価格を送信しました。"
+      },
+      "inProgress": {
+        "label": "進行中",
+        "description": "スケッチやフィッティング、チャットが進んでいます。"
+      },
+      "inProduction": {
+        "label": "製作中",
+        "description": "アトリエがガーメントを製作しています。"
+      },
+      "delivered": {
+        "label": "納品済み",
+        "description": "作品がコンシェルジュ検品とともに到着しました。"
+      },
+      "completed": {
+        "label": "完了",
+        "description": "プロジェクトが終了しアーカイブされました。"
+      }
+    }
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "app": {
+    "name": "LUXE Atelier"
+  },
+  "nav": {
+    "home": "Accueil",
+    "catalog": "Catalogue",
+    "designers": "Créateurs",
+    "customOrders": "Commandes sur mesure",
+    "profile": "Profil",
+    "cart": "Panier",
+    "language": "Langue",
+    "menu": "Menu"
+  },
+  "buttons": {
+    "exploreCatalog": "Explorer le catalogue",
+    "bookFitting": "Réserver un essayage",
+    "signIn": "Connexion",
+    "viewAll": "Tout voir",
+    "reserveLook": "Réserver le look",
+    "book": "Réserver",
+    "view": "Voir",
+    "addToCart": "Ajouter au panier",
+    "viewProduct": "Voir le produit"
+  },
+  "hero": {
+    "title": "Le luxe sur mesure livré partout",
+    "subtitle": "Reliez-vous aux ateliers du monde entier et suivez chaque essayage dans un seul espace.",
+    "primaryCta": "Explorer le catalogue",
+    "secondaryCta": "Réserver un essayage"
+  },
+  "Home": {
+    "stats": {
+      "ateliers": {
+        "label": "Ateliers dans le monde",
+        "value": "120+",
+        "detail": "28 capitales de la mode"
+      },
+      "fittings": {
+        "label": "Essayages/mois",
+        "value": "1,4K",
+        "detail": "Conciergerie en direct"
+      },
+      "leadTime": {
+        "label": "Délai moyen",
+        "value": "9 jours",
+        "detail": "Production prioritaire"
+      },
+      "netZero": {
+        "label": "Partenaires neutres",
+        "value": "68",
+        "detail": "Chaîne certifiée"
+      }
+    },
+    "capsules": {
+      "title": "Les dernières capsules",
+      "description": "Nouvelles sélections chaque jeudi"
+    },
+    "categories": {
+      "title": "Ambiances par catégorie",
+      "description": "Styling concierge, visites d'atelier et livraison premium",
+      "items": {
+        "eveningwear": {
+          "title": "Soirée",
+          "blurb": "Satin biais, corsets sculptés, broderies lumineuses."
+        },
+        "tailoring": {
+          "title": "Tailleur",
+          "blurb": "Costumes architecturés et tenues jour-nuit sophistiquées."
+        },
+        "resort": {
+          "title": "Resort",
+          "blurb": "Lin léger et palettes éco-teintes pour voyageurs."
+        },
+        "accessories": {
+          "title": "Accessoires",
+          "blurb": "Séries limitées, bijoux sculpturaux, souliers couture."
+        }
+      }
+    },
+    "experiences": {
+      "title": "Expériences",
+      "description": "Lancements immersifs, sourcing concierge, essayages sur mesure",
+      "items": {
+        "trunkshow": {
+          "title": "Trunkshows designers",
+          "summary": "Diffusez Lagos, Paris et Séoul avec chat en temps réel."
+        },
+        "fittings": {
+          "title": "Essayages 3D",
+          "summary": "Validez les retouches sur des rendus à l'échelle réelle."
+        },
+        "concierge": {
+          "title": "Sourcing concierge",
+          "summary": "Envoyez vos planches, nous trouvons les tissus d'archive en 48h."
+        }
+      },
+      "featuredLabel": "À la une"
+    },
+    "designers": {
+      "title": "Créateurs résidents",
+      "description": "Rencontrez les ateliers qui redéfinissent le luxe"
+    },
+    "testimonials": {
+      "title": "Témoignages",
+      "description": "Histoires de notre clientèle",
+      "items": {
+        "ama": {
+          "quote": "« Le chat atelier et les essayages 3D ont supprimé toute surprise. Ma robe est arrivée parfaite. »",
+          "author": "Ama T., Lagos"
+        },
+        "leila": {
+          "quote": "« Le sourcing premium m'a permis de recréer une robe d'archive en trois semaines. »",
+          "author": "Leila M., Dubaï"
+        },
+        "jonas": {
+          "quote": "« Les créateurs déposent leurs croquis directement dans mes boards clients. »",
+          "author": "Jonas P., New York"
+        }
+      }
+    }
+  },
+  "products": {
+    "sampleTitle": "Produit d'exemple",
+    "category": "Capsule",
+    "availability": "Fabriqué à la demande"
+  },
+  "theme": {
+    "toggle": "Changer le thème",
+    "day": "Jour",
+    "night": "Nuit",
+    "label": "Thème"
+  },
+  "forms": {
+    "search": "Rechercher",
+    "email": "Adresse e-mail"
+  },
+  "footer": {
+    "crafted": "Créé avec soin • Ateliers mondiaux & expériences sur mesure",
+    "terms": "Conditions",
+    "privacy": "Confidentialité"
+  },
+  "errors": {
+    "generic": "Une erreur est survenue. Veuillez réessayer.",
+    "offline": "Impossible de joindre les ateliers. Vérifiez votre connexion."
+  },
+  "common": {
+    "language": "Langue",
+    "mode": "Mode"
+  },
+  "actions": {
+    "signIn": "Connexion",
+    "viewWorkspace": "Voir l'espace de travail",
+    "openChat": "Ouvrir le chat"
+  },
+  "designers": {
+    "card": {
+      "placeholderName": "Créateur",
+      "placeholderBio": "Tailoring contemporain & essentiels raffinés",
+      "tags": {
+        "readyToWear": "Prêt-à-porter",
+        "bespoke": "Sur mesure"
+      }
+    }
+  },
+  "orders": {
+    "card": {
+      "title": "Commande sur mesure",
+      "descriptionPlaceholder": "En attente des notes du créateur",
+      "budget": "Budget",
+      "paymentStatus": "Statut du paiement",
+      "designerReminder": "Nouveau brief en attente de votre devis."
+    },
+    "status": {
+      "pending": "En attente",
+      "requested": "Brief reçu",
+      "quoted": "Devis envoyé",
+      "inProgress": "En cours",
+      "inProduction": "En production",
+      "delivered": "Livré",
+      "completed": "Terminé",
+      "rejected": "Rejeté"
+    },
+    "timeline": {
+      "requested": {
+        "label": "Brief soumis",
+        "description": "Le client a partagé son inspiration et ses exigences."
+      },
+      "quoted": {
+        "label": "Devis envoyé",
+        "description": "Le créateur a étudié le brief et envoyé la tarification."
+      },
+      "inProgress": {
+        "label": "En cours",
+        "description": "Croquis, essayages et discussions sont en mouvement."
+      },
+      "inProduction": {
+        "label": "En production",
+        "description": "L'atelier construit la pièce."
+      },
+      "delivered": {
+        "label": "Livré",
+        "description": "La pièce est arrivée avec contrôle concierge."
+      },
+      "completed": {
+        "label": "Terminé",
+        "description": "Projet clôturé et archivé."
+      }
+    }
+  }
+}

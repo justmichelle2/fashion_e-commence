@@ -26,8 +26,21 @@ function LocaleSwitcher({ locale, locales, label, onChange }) {
       <span className="sr-only">{label}</span>
       <div className="relative">
         <select
-          className="appearance-none rounded-full border border-border/50 bg-card/60 px-4 py-1 text-sm font-semibold uppercase tracking-[0.3em]"
+          className="appearance-none rounded-full border border-black/40 bg-black px-4 py-1 text-sm font-semibold uppercase tracking-[0.3em] text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 dark:bg-black dark:text-white dark:border-white/40"
           value={locale}
+          onChange={handleChange}
+        >
+          {locales.map((entry) => (
+            <option key={entry.code} value={entry.code}>
+              {entry.label}
+            </option>
+          ))}
+        </select>
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-white/80">⌄</span>
+      </div>
+    </label>
+  )
+}
 
 function CartIcon({ className = 'h-4 w-4' }) {
   return (
@@ -45,19 +58,6 @@ function CartIcon({ className = 'h-4 w-4' }) {
       <circle cx="18" cy="21" r="1.4" />
       <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H7" />
     </svg>
-  )
-}
-          onChange={handleChange}
-        >
-          {locales.map((entry) => (
-            <option key={entry.code} value={entry.code}>
-              {entry.label}
-            </option>
-          ))}
-        </select>
-        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs">⌄</span>
-      </div>
-    </label>
   )
 }
 
@@ -118,7 +118,7 @@ export default function Navbar() {
 
         {desktopActions}
 
-        <button className="md:hidden p-2" aria-label="menu" onClick={() => setOpen((prev) => !prev)}>
+        <button className="md:hidden p-2" aria-label={t('nav.menu', 'Menu')} onClick={() => setOpen((prev) => !prev)}>
           <svg
             width="24"
             height="24"
@@ -135,7 +135,7 @@ export default function Navbar() {
         <div className="md:hidden" style={{ background: 'var(--body-bg)', borderTop: `1px solid var(--card-border)` }}>
           <div className="px-4 py-4 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-[0.3em] text-muted">Mode</span>
+              <span className="text-xs uppercase tracking-[0.3em] text-muted">{t('common.mode', 'Mode')}</span>
               <ThemeToggle />
             </div>
             {mobileLocaleSwitcher}

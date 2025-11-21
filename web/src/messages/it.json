@@ -1,0 +1,211 @@
+{
+  "app": {
+    "name": "LUXE Atelier"
+  },
+  "nav": {
+    "home": "Home",
+    "catalog": "Catalogo",
+    "designers": "Designer",
+    "customOrders": "Ordini su misura",
+    "profile": "Profilo",
+    "cart": "Carrello",
+    "language": "Lingua",
+    "menu": "Menu"
+  },
+  "buttons": {
+    "exploreCatalog": "Esplora il catalogo",
+    "bookFitting": "Prenota una prova",
+    "signIn": "Accedi",
+    "viewAll": "Vedi tutto",
+    "reserveLook": "Riserva il look",
+    "book": "Prenota",
+    "view": "Vedi",
+    "addToCart": "Aggiungi al carrello",
+    "viewProduct": "Vedi prodotto"
+  },
+  "hero": {
+    "title": "Lusso su misura consegnato ovunque",
+    "subtitle": "Connettiti con gli atelier di tutto il mondo e segui ogni prova in un'unica piattaforma.",
+    "primaryCta": "Esplora il catalogo",
+    "secondaryCta": "Prenota una prova"
+  },
+  "Home": {
+    "stats": {
+      "ateliers": {
+        "label": "Atelier nel mondo",
+        "value": "120+",
+        "detail": "28 capitali della moda"
+      },
+      "fittings": {
+        "label": "Prove/mese",
+        "value": "1.4K",
+        "detail": "Concierge live"
+      },
+      "leadTime": {
+        "label": "Tempo medio",
+        "value": "9 giorni",
+        "detail": "Produzione prioritaria"
+      },
+      "netZero": {
+        "label": "Partner net-zero",
+        "value": "68",
+        "detail": "Filiera certificata"
+      }
+    },
+    "capsules": {
+      "title": "Ultimi capsule drop",
+      "description": "Nuove selezioni ogni giovedì"
+    },
+    "categories": {
+      "title": "Mood per categoria",
+      "description": "Styling concierge, visite atelier e consegna premium",
+      "items": {
+        "eveningwear": {
+          "title": "Sera",
+          "blurb": "Seta in sbieco, corsetti scolpiti, ricami luminosi."
+        },
+        "tailoring": {
+          "title": "Tailleur",
+          "blurb": "Suiting architettonico e look day-to-night."
+        },
+        "resort": {
+          "title": "Resort",
+          "blurb": "Lini impalpabili e palette eco per viaggiatori."
+        },
+        "accessories": {
+          "title": "Accessori",
+          "blurb": "Borse artigianali, gioielli scultorei, calzature couture."
+        }
+      }
+    },
+    "experiences": {
+      "title": "Esperienze",
+      "description": "Drop immersivi, sourcing concierge, prove bespoke",
+      "items": {
+        "trunkshow": {
+          "title": "Trunkshow designer",
+          "summary": "Streaming da Lagos, Parigi e Seul con chat live."
+        },
+        "fittings": {
+          "title": "Prove 3D",
+          "summary": "Approva le modifiche su render in scala reale."
+        },
+        "concierge": {
+          "title": "Concierge sourcing",
+          "summary": "Carica reference, troviamo tessuti d'archivio in 48h."
+        }
+      },
+      "featuredLabel": "In evidenza"
+    },
+    "designers": {
+      "title": "Designer residenti",
+      "description": "Conosci gli atelier che definiscono il lusso moderno"
+    },
+    "testimonials": {
+      "title": "Testimonianze",
+      "description": "Storie della nostra clientela",
+      "items": {
+        "ama": {
+          "quote": "“Chat e prove 3D: nessuna sorpresa, abito perfetto.”",
+          "author": "Ama T., Lagos"
+        },
+        "leila": {
+          "quote": "“Il sourcing premium ha ricreato un abito d'archivio in tre settimane.”",
+          "author": "Leila M., Dubai"
+        },
+        "jonas": {
+          "quote": "“I designer caricano gli schizzi direttamente sulle mie board.”",
+          "author": "Jonas P., NYC"
+        }
+      }
+    }
+  },
+  "products": {
+    "sampleTitle": "Prodotto di esempio",
+    "category": "Capsule",
+    "availability": "Realizzato su ordinazione"
+  },
+  "theme": {
+    "toggle": "Cambia tema",
+    "day": "Giorno",
+    "night": "Notte",
+    "label": "Tema"
+  },
+  "forms": {
+    "search": "Cerca",
+    "email": "Email"
+  },
+  "footer": {
+    "crafted": "Creato con cura • Atelier globali ed esperienze su misura",
+    "terms": "Termini",
+    "privacy": "Privacy"
+  },
+  "errors": {
+    "generic": "Si è verificato un errore. Riprova.",
+    "offline": "Impossibile raggiungere la rete di atelier."
+  },
+  "common": {
+    "language": "Lingua",
+    "mode": "Modalità"
+  },
+  "actions": {
+    "signIn": "Accedi",
+    "viewWorkspace": "Vedi workspace",
+    "openChat": "Apri chat"
+  },
+  "designers": {
+    "card": {
+      "placeholderName": "Designer",
+      "placeholderBio": "Sartoria contemporanea e basics elevati",
+      "tags": {
+        "readyToWear": "Prêt-à-porter",
+        "bespoke": "Su misura"
+      }
+    }
+  },
+  "orders": {
+    "card": {
+      "title": "Ordine su misura",
+      "descriptionPlaceholder": "In attesa delle note del designer",
+      "budget": "Budget",
+      "paymentStatus": "Stato del pagamento",
+      "designerReminder": "Nuovo brief in attesa del tuo preventivo."
+    },
+    "status": {
+      "pending": "In sospeso",
+      "requested": "Brief ricevuto",
+      "quoted": "Preventivo inviato",
+      "inProgress": "In corso",
+      "inProduction": "In produzione",
+      "delivered": "Consegnato",
+      "completed": "Completato",
+      "rejected": "Respinto"
+    },
+    "timeline": {
+      "requested": {
+        "label": "Brief inviato",
+        "description": "Il cliente ha condiviso ispirazioni e requisiti."
+      },
+      "quoted": {
+        "label": "Preventivo inviato",
+        "description": "Il designer ha revisionato e inviato i prezzi."
+      },
+      "inProgress": {
+        "label": "In corso",
+        "description": "Bozzetti, fitting e chat sono attivi."
+      },
+      "inProduction": {
+        "label": "In produzione",
+        "description": "L'atelier sta costruendo il capo."
+      },
+      "delivered": {
+        "label": "Consegnato",
+        "description": "Il pezzo è arrivato con controllo concierge."
+      },
+      "completed": {
+        "label": "Completato",
+        "description": "Progetto chiuso e archiviato."
+      }
+    }
+  }
+}

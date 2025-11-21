@@ -1,0 +1,211 @@
+{
+  "app": {
+    "name": "LUXE Atelier"
+  },
+  "nav": {
+    "home": "首页",
+    "catalog": "目录",
+    "designers": "设计师",
+    "customOrders": "定制订单",
+    "profile": "个人中心",
+    "cart": "购物车",
+    "language": "语言",
+    "menu": "菜单"
+  },
+  "buttons": {
+    "exploreCatalog": "浏览目录",
+    "bookFitting": "预约试衣",
+    "signIn": "登录",
+    "viewAll": "查看全部",
+    "reserveLook": "预约造型",
+    "book": "预约",
+    "view": "查看",
+    "addToCart": "加入购物车",
+    "viewProduct": "查看商品"
+  },
+  "hero": {
+    "title": "定制奢华，全球速递",
+    "subtitle": "连接全球高级工作室，在一个平台跟进全部量体与试衣。",
+    "primaryCta": "浏览目录",
+    "secondaryCta": "预约试衣"
+  },
+  "Home": {
+    "stats": {
+      "ateliers": {
+        "label": "全球工作室",
+        "value": "120+",
+        "detail": "覆盖28座时尚之都"
+      },
+      "fittings": {
+        "label": "每月试衣",
+        "value": "1.4K",
+        "detail": "实时礼宾服务"
+      },
+      "leadTime": {
+        "label": "平均交付",
+        "value": "9天",
+        "detail": "优先生产通道"
+      },
+      "netZero": {
+        "label": "零碳伙伴",
+        "value": "68",
+        "detail": "认证供应链"
+      }
+    },
+    "capsules": {
+      "title": "最新胶囊系列",
+      "description": "每周四更新精选"
+    },
+    "categories": {
+      "title": "风格主题",
+      "description": "礼宾造型、工作室探访与白手套配送",
+      "items": {
+        "eveningwear": {
+          "title": "晚礼服",
+          "blurb": "斜裁真丝、结构束胸、璀璨珠绣。"
+        },
+        "tailoring": {
+          "title": "高级成衣",
+          "blurb": "建筑感剪裁与日夜皆宜的造型。"
+        },
+        "resort": {
+          "title": "度假系列",
+          "blurb": "轻盈亚麻与环保染色的旅行配色。"
+        },
+        "accessories": {
+          "title": "配饰",
+          "blurb": "限量手袋、雕塑感珠宝、定制鞋履。"
+        }
+      }
+    },
+    "experiences": {
+      "title": "沉浸式体验",
+      "description": "发布会、私人选料、专属试衣",
+      "items": {
+        "trunkshow": {
+          "title": "设计师巡展",
+          "summary": "实时连线拉各斯、巴黎与首尔。"
+        },
+        "fittings": {
+          "title": "3D试衣",
+          "summary": "在等比渲染上批注并确认改动。"
+        },
+        "concierge": {
+          "title": "礼宾选料",
+          "summary": "上传灵感板，48小时内找到档案面料。"
+        }
+      },
+      "featuredLabel": "精选"
+    },
+    "designers": {
+      "title": "驻留设计师",
+      "description": "结识塑造当代奢华的工作室"
+    },
+    "testimonials": {
+      "title": "客户故事",
+      "description": "来自全球客户的反馈",
+      "items": {
+        "ama": {
+          "quote": "“工作室聊天与3D试衣让婚纱零意外。”",
+          "author": "Ama T., 拉各斯"
+        },
+        "leila": {
+          "quote": "“礼宾选料帮我三周内复刻90年代档案礼服。”",
+          "author": "Leila M., 迪拜"
+        },
+        "jonas": {
+          "quote": "“设计师将草图直接同步到我的客户看板。”",
+          "author": "Jonas P., 纽约"
+        }
+      }
+    }
+  },
+  "products": {
+    "sampleTitle": "示例商品",
+    "category": "胶囊系列",
+    "availability": "下单后制作"
+  },
+  "theme": {
+    "toggle": "切换主题",
+    "day": "日间",
+    "night": "夜间",
+    "label": "主题"
+  },
+  "forms": {
+    "search": "搜索",
+    "email": "邮箱"
+  },
+  "footer": {
+    "crafted": "悉心打造 • 全球工作室与定制体验",
+    "terms": "条款",
+    "privacy": "隐私"
+  },
+  "errors": {
+    "generic": "发生错误，请重试。",
+    "offline": "暂时无法连接到工作室网络，请检查网络。"
+  },
+  "common": {
+    "language": "语言",
+    "mode": "模式"
+  },
+  "actions": {
+    "signIn": "登录",
+    "viewWorkspace": "查看工作区",
+    "openChat": "打开聊天"
+  },
+  "designers": {
+    "card": {
+      "placeholderName": "设计师",
+      "placeholderBio": "现代剪裁与高级基础款",
+      "tags": {
+        "readyToWear": "高级成衣",
+        "bespoke": "定制"
+      }
+    }
+  },
+  "orders": {
+    "card": {
+      "title": "定制订单",
+      "descriptionPlaceholder": "等待设计师备注",
+      "budget": "预算",
+      "paymentStatus": "付款状态",
+      "designerReminder": "有新需求等待你的报价。"
+    },
+    "status": {
+      "pending": "待处理",
+      "requested": "已提交需求",
+      "quoted": "报价已发送",
+      "inProgress": "进行中",
+      "inProduction": "制作中",
+      "delivered": "已送达",
+      "completed": "已完成",
+      "rejected": "已拒绝"
+    },
+    "timeline": {
+      "requested": {
+        "label": "简报已提交",
+        "description": "客户已分享灵感与需求。"
+      },
+      "quoted": {
+        "label": "报价已发送",
+        "description": "设计师已评估并提供价格。"
+      },
+      "inProgress": {
+        "label": "进行中",
+        "description": "草图、试衣与沟通正在进行。"
+      },
+      "inProduction": {
+        "label": "制作中",
+        "description": "工作室正在制作成衣。"
+      },
+      "delivered": {
+        "label": "已送达",
+        "description": "成品由礼宾团队送达并检验。"
+      },
+      "completed": {
+        "label": "已完成",
+        "description": "项目已结束并归档。"
+      }
+    }
+  }
+}

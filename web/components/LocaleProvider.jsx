@@ -1,208 +1,75 @@
 "use client"
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useSession } from './SessionProvider'
+import { createContext, useCallback, useContext, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
+import { NextIntlClientProvider, useLocale as useIntlLocale, useTranslations } from 'next-intl'
+import { DEFAULT_LOCALE, LOCALE_STORAGE_KEY, SUPPORTED_LOCALES } from '../i18n/settings'
 
-const DEFAULT_LOCALES = [
-  { code: 'en', label: 'English' },
-  { code: 'fr', label: 'Français' },
-  { code: 'es', label: 'Español' },
-]
-
-const LocaleContext = createContext({
-  locale: 'en',
-  defaultLocale: 'en',
-  availableLocales: [],
-  messages: {},
-  status: 'loading',
-  changeLocale: () => {},
-  t: (key, fallback) => fallback ?? key,
-})
-
+const LocaleContext = createContext(null)
 LocaleContext.displayName = 'LocaleContext'
 
-const STORAGE_KEY = 'luxe-preferred-locale'
-
-function normalizeLocale(value) {
-  if (!value) return ''
-  return String(value).trim().toLowerCase()
-}
-
-function getStoredLocale() {
-  if (typeof window === 'undefined') return ''
-  try {
-    return window.localStorage.getItem(STORAGE_KEY) || ''
-  } catch (err) {
-    console.warn('read locale storage failed', err)
-    return ''
-  }
-}
-
-function setStoredLocale(value) {
-  if (typeof window === 'undefined') return
-  try {
-    window.localStorage.setItem(STORAGE_KEY, value)
-  } catch (err) {
-    console.warn('write locale storage failed', err)
-  }
-}
-
-function getBrowserLocale() {
-  if (typeof navigator === 'undefined') return ''
-  const raw = navigator.language || navigator.languages?.[0]
-  if (!raw) return ''
-  return normalizeLocale(raw.split('-')[0])
-}
-
-function findSupportedLocale(candidateList, supported, fallback) {
-  if (!Array.isArray(supported) || supported.length === 0) return fallback || 'en'
-  const normalizedSet = supported.map((item) => normalizeLocale(item.code))
-  const next = (candidateList || [])
-    .map(normalizeLocale)
-    .find((candidate) => candidate && normalizedSet.includes(candidate))
-  return next || fallback || 'en'
-}
-
-export function LocaleProvider({ children }) {
-  const { user, token } = useSession()
-  const [locale, setLocale] = useState('en')
-  const [defaultLocale, setDefaultLocale] = useState('en')
-  const [availableLocales, setAvailableLocales] = useState(DEFAULT_LOCALES)
-  const [messages, setMessages] = useState({})
-  const [status, setStatus] = useState('loading')
-
-  useEffect(() => {
-    let cancelled = false
-    async function loadMetadata() {
-      try {
-        const res = await fetch('/api/locales', { headers: { Accept: 'application/json' } })
-        const data = await res.json()
-        if (cancelled) return
-        const localesList = Array.isArray(data.locales) && data.locales.length > 0 ? data.locales : DEFAULT_LOCALES
-        const fallback = normalizeLocale(data.defaultLocale) || 'en'
-        setAvailableLocales(localesList)
-        setDefaultLocale(fallback)
-        const firstChoice = findSupportedLocale(
-          [user?.preferredLocale, getStoredLocale(), getBrowserLocale(), fallback],
-          localesList,
-          fallback
-        )
-        setLocale((prev) => (prev === firstChoice ? prev : firstChoice))
-      } catch (err) {
-        if (!cancelled) {
-          console.warn('Locale metadata fetch failed', err)
-          setAvailableLocales(DEFAULT_LOCALES)
-          setDefaultLocale('en')
-        }
-      }
-    }
-    loadMetadata()
-    return () => {
-      cancelled = true
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.preferredLocale])
-
-  useEffect(() => {
-    if (!user?.preferredLocale) return
-    const next = normalizeLocale(user.preferredLocale)
-    if (!next) return
-    setLocale((prev) => (prev === next ? prev : next))
-  }, [user?.preferredLocale])
-
-  useEffect(() => {
-    if (!locale) return
-    let cancelled = false
-    async function loadMessages() {
-      setStatus('loading')
-      try {
-        const res = await fetch(`/api/locales/${locale}`, { headers: { Accept: 'application/json' }, cache: 'no-store' })
-        if (!res.ok) throw new Error(`Failed to load locale ${locale}`)
-        const data = await res.json()
-        if (cancelled) return
-        setMessages(data.messages || {})
-        setStatus('ready')
-      } catch (err) {
-        if (cancelled) return
-        console.warn('Locale message fetch failed', err)
-        setMessages({})
-        setStatus('error')
-      }
-    }
-    loadMessages()
-    return () => {
-      cancelled = true
-    }
-  }, [locale])
-
-  useEffect(() => {
-    if (!locale) return
-    setStoredLocale(locale)
-  }, [locale])
+function LocaleBridge({ children }) {
+  const router = useRouter()
+  const locale = useIntlLocale()
+  const intl = useTranslations()
+  const availableLocales = SUPPORTED_LOCALES
 
   const changeLocale = useCallback(
-    async (nextLocale, { persistPreference = true } = {}) => {
-      const normalized = normalizeLocale(nextLocale)
+    async (nextLocale) => {
+      const normalized = String(nextLocale || '').trim().toLowerCase()
       if (!normalized || normalized === locale) return locale
-      const supported = availableLocales.some((entry) => normalizeLocale(entry.code) === normalized)
-      if (!supported) return locale
-      setLocale(normalized)
-      setStoredLocale(normalized)
-      if (persistPreference && token) {
-        try {
-          await fetch('/api/locales/preferred', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-              Accept: 'application/json',
-            },
-            body: JSON.stringify({ preferredLocale: normalized }),
-          })
-        } catch (err) {
-          console.warn('Persist preferred locale failed', err)
+      if (!availableLocales.some((entry) => entry.code === normalized)) return locale
+      try {
+        await fetch('/api/locale', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ locale: normalized }),
+        })
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(LOCALE_STORAGE_KEY, normalized)
         }
+      } catch (error) {
+        console.warn('Failed to persist locale preference', error)
       }
+      router.refresh()
       return normalized
     },
-    [availableLocales, locale, token]
+    [availableLocales, locale, router]
   )
 
   const translate = useCallback(
     (key, fallback) => {
       if (!key) return fallback ?? ''
-      const path = Array.isArray(key) ? key : String(key).split('.')
-      let current = messages
-      for (const segment of path) {
-        if (current && Object.prototype.hasOwnProperty.call(current, segment)) {
-          current = current[segment]
-        } else {
-          current = undefined
-          break
-        }
+      try {
+        return intl(key)
+      } catch (error) {
+        return fallback ?? (Array.isArray(key) ? key.join('.') : key)
       }
-      if (current === undefined || current === null) {
-        return fallback ?? String(Array.isArray(key) ? key.join('.') : key)
-      }
-      return current
     },
-    [messages]
+    [intl]
   )
 
   const value = useMemo(
     () => ({
       locale,
-      defaultLocale,
+      defaultLocale: DEFAULT_LOCALE,
       availableLocales,
-      messages,
-      status,
+      status: 'ready',
       changeLocale,
       t: translate,
     }),
-    [locale, defaultLocale, availableLocales, messages, status, changeLocale, translate]
+    [availableLocales, changeLocale, locale, translate]
   )
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
+}
+
+export default function LocaleProvider({ locale = DEFAULT_LOCALE, messages = {}, children }) {
+  return (
+    <NextIntlClientProvider locale={locale} messages={messages} timeZone="UTC">
+      <LocaleBridge>{children}</LocaleBridge>
+    </NextIntlClientProvider>
+  )
 }
 
 export function useLocale() {
@@ -212,5 +79,3 @@ export function useLocale() {
   }
   return context
 }
-
-export default LocaleProvider

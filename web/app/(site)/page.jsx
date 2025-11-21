@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { getTranslations } from 'next-intl/server'
 import Hero from '../../components/Hero'
 import DesignerCard from '../../components/DesignerCard'
 import ProductCard from '../../components/ProductCard'
@@ -11,70 +12,15 @@ import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import { getProducts, getDesigners } from '../../lib/api'
 
-const STAT_CARDS = [
-  { label: 'Ateliers worldwide', value: '120+', detail: '28 fashion capitals' },
-  { label: 'Custom fittings/mo', value: '1.4K', detail: 'Live concierge chats' },
-  { label: 'Avg. lead time', value: '9 days', detail: 'Priority production' },
-  { label: 'Net-zero partners', value: '68', detail: 'Certified supply chain' },
-]
-
-const CATEGORY_GRID = [
-  {
-    title: 'Eveningwear',
-    blurb: 'Bias-cut silk, sculpted corsetry, luminous beadwork.',
-    image: '/images/sample1.svg',
-  },
-  {
-    title: 'Tailoring',
-    blurb: 'Architectural suiting and elevated day-to-night separates.',
-    image: '/images/sample2.svg',
-  },
-  {
-    title: 'Resort',
-    blurb: 'Weightless linens and eco-dyed palettes for itinerant wardrobes.',
-    image: '/images/sample3.svg',
-  },
-  {
-    title: 'Accessories',
-    blurb: 'Limited-run artisan totes, sculptural jewelry, couture footwear.',
-    image: '/images/sample4.svg',
-  },
-]
-
-const FEATURED_SLIDER = [
-  {
-    title: 'Designer trunkshows',
-    summary: 'Stream ateliers in Lagos, Paris, and Seoul with realtime chat.',
-    image: '/images/sample2.svg',
-  },
-  {
-    title: '3D fittings',
-    summary: 'Approve pattern adjustments and pin notes on true-to-scale renders.',
-    image: '/images/sample3.svg',
-  },
-  {
-    title: 'Concierge sourcing',
-    summary: 'Upload tear sheets, we locate archival fabrics within 48h.',
-    image: '/images/sample4.svg',
-  },
-]
-
-const TESTIMONIALS = [
-  {
-    quote: '“The atelier chat and 3D fittings meant zero surprises. My bridal look arrived flawless.”',
-    author: 'Ama T., Lagos',
-  },
-  {
-    quote: '“White-glove fabric sourcing helped me recreate a 90s archive gown in three weeks.”',
-    author: 'Leila M., Dubai',
-  },
-  {
-    quote: '“Designers upload sketches straight into my client boards—finally a single workspace.”',
-    author: 'Jonas P., NYC',
-  },
-]
+const STAT_KEYS = ['ateliers', 'fittings', 'leadTime', 'netZero']
+const CATEGORY_KEYS = ['eveningwear', 'tailoring', 'resort', 'accessories']
+const EXPERIENCE_KEYS = ['trunkshow', 'fittings', 'concierge']
+const TESTIMONIAL_KEYS = ['ama', 'leila', 'jonas']
+const CATEGORY_IMAGES = ['/images/sample1.svg', '/images/sample2.svg', '/images/sample3.svg', '/images/sample4.svg']
+const EXPERIENCE_IMAGES = ['/images/sample2.svg', '/images/sample3.svg', '/images/sample4.svg']
 
 export default async function HomePage() {
+  const t = await getTranslations('Home')
   const [productRes, designerRes] = await Promise.all([
     getProducts('?limit=9').catch(() => ({ products: [] })),
     getDesigners().catch(() => ({ designers: [] })),
@@ -82,22 +28,38 @@ export default async function HomePage() {
 
   const products = productRes?.products ?? []
   const designers = designerRes?.designers ?? []
+  const stats = STAT_KEYS.map((key) => ({
+    key,
+    label: t(`stats.${key}.label`),
+    value: t(`stats.${key}.value`),
+    detail: t(`stats.${key}.detail`),
+  }))
+  const categories = CATEGORY_KEYS.map((key, index) => ({
+    key,
+    title: t(`categories.items.${key}.title`),
+    blurb: t(`categories.items.${key}.blurb`),
+    image: CATEGORY_IMAGES[index % CATEGORY_IMAGES.length],
+  }))
+  const experiences = EXPERIENCE_KEYS.map((key, index) => ({
+    key,
+    title: t(`experiences.items.${key}.title`),
+    summary: t(`experiences.items.${key}.summary`),
+    image: EXPERIENCE_IMAGES[index % EXPERIENCE_IMAGES.length],
+  }))
+  const testimonials = TESTIMONIAL_KEYS.map((key) => ({
+    key,
+    quote: t(`testimonials.items.${key}.quote`),
+    author: t(`testimonials.items.${key}.author`),
+  }))
 
   return (
     <div className="space-y-20">
       <Container as="section" className="space-y-8">
-        <Hero
-          title="Made-to-measure luxury, shipped globally"
-          subtitle="Connect with ateliers across continents, commission one-of-a-kind looks, and track every fitting in a single place."
-          ctas={[
-            { label: 'Explore catalog', href: '/catalog' },
-            { label: 'Book a fitting', href: '/custom-order' },
-          ]}
-        />
+        <Hero />
 
         <AutoGrid className="text-center" cols="grid-cols-2 md:grid-cols-4">
-          {STAT_CARDS.map((card) => (
-            <Card key={card.label} className="p-6">
+          {stats.map((card) => (
+            <Card key={card.key} className="p-6">
               <p className="text-sm uppercase tracking-[0.4em] text-muted">{card.label}</p>
               <p className="mt-3 text-3xl font-serif">{card.value}</p>
               <p className="mt-1 text-sm text-muted">{card.detail}</p>
@@ -108,9 +70,13 @@ export default async function HomePage() {
 
       <section className="space-y-10">
         <SectionHeading
-          title="The latest capsule drops"
-          description="Fresh edits added every Thursday"
-          action={<Button as={Link} href="/catalog" variant="secondary">View all</Button>}
+          title={t('capsules.title')}
+          description={t('capsules.description')}
+          action={
+            <Button as={Link} href="/catalog" variant="secondary">
+              {t('buttons.viewAll', 'View all')}
+            </Button>
+          }
         />
         <Container>
           <AutoGrid>
@@ -123,13 +89,13 @@ export default async function HomePage() {
 
       <section className="space-y-10">
         <SectionHeading
-          title="Category moods"
-          description="Concierge styling, atelier visits, and white-glove delivery"
+          title={t('categories.title')}
+          description={t('categories.description')}
         />
         <Container>
           <AutoGrid cols="grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-            {CATEGORY_GRID.map((item) => (
-              <Card key={item.title} className="p-6 space-y-4">
+            {categories.map((item) => (
+              <Card key={item.key} className="p-6 space-y-4">
                 <div className="relative h-48 rounded-2xl overflow-hidden">
                   <Image
                     src={item.image}
@@ -143,7 +109,9 @@ export default async function HomePage() {
                   <h4 className="text-lg font-serif">{item.title}</h4>
                   <p className="text-sm text-muted mt-2">{item.blurb}</p>
                 </div>
-                <Button variant="secondary" size="sm">Reserve look</Button>
+                <Button variant="secondary" size="sm">
+                  {t('buttons.reserveLook', 'Reserve look')}
+                </Button>
               </Card>
             ))}
           </AutoGrid>
@@ -152,13 +120,13 @@ export default async function HomePage() {
 
       <section className="space-y-8">
         <SectionHeading
-          title="Experiences"
-          description="Immersive drops, concierge sourcing, bespoke fittings"
+          title={t('experiences.title')}
+          description={t('experiences.description')}
         />
         <div className="overflow-x-auto">
           <div className="flex gap-6 min-w-[600px] px-4 sm:px-6 lg:px-8">
-            {FEATURED_SLIDER.map((feature) => (
-              <Card key={feature.title} className="flex w-80 flex-shrink-0 flex-col gap-4">
+            {experiences.map((feature) => (
+              <Card key={feature.key} className="flex w-80 flex-shrink-0 flex-col gap-4">
                 <div className="relative h-48 rounded-2xl overflow-hidden">
                   <Image
                     src={feature.image}
@@ -168,11 +136,11 @@ export default async function HomePage() {
                   />
                 </div>
                 <div>
-                  <Badge variant="accent">Featured</Badge>
+                  <Badge variant="accent">{t('experiences.featuredLabel', 'Featured')}</Badge>
                   <h4 className="mt-3 text-xl font-serif">{feature.title}</h4>
                   <p className="text-sm text-muted mt-2">{feature.summary}</p>
                 </div>
-                <Button variant="secondary">Book</Button>
+                <Button variant="secondary">{t('buttons.book', 'Book')}</Button>
               </Card>
             ))}
           </div>
@@ -181,8 +149,8 @@ export default async function HomePage() {
 
       <section className="space-y-10">
         <SectionHeading
-          title="Resident designers"
-          description="Meet the ateliers shaping modern luxury"
+          title={t('designers.title')}
+          description={t('designers.description')}
         />
         <Container>
           <AutoGrid cols="grid-cols-1 md:grid-cols-3">
@@ -195,12 +163,12 @@ export default async function HomePage() {
 
       <section className="space-y-10">
         <SectionHeading
-          title="Testimonials"
-          description="Stories from our clientele"
+          title={t('testimonials.title')}
+          description={t('testimonials.description')}
         />
         <Container>
           <AutoGrid cols="grid-cols-1 md:grid-cols-3">
-            {TESTIMONIALS.map((item) => (
+            {testimonials.map((item) => (
               <Card key={item.author} className="p-6 space-y-4">
                 <p className="text-lg font-serif">{item.quote}</p>
                 <p className="text-sm text-muted">{item.author}</p>

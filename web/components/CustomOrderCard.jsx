@@ -1,5 +1,9 @@
+"use client"
+
 import Link from 'next/link'
 import CustomOrderTimeline from './CustomOrderTimeline'
+import { useLocale } from './LocaleProvider'
+import { normalizeStatusKey, humanizeStatus } from './orderStatus'
 
 const STATUS_COLOR = {
   requested: 'bg-amber-200/30 text-amber-200',
@@ -11,9 +15,9 @@ const STATUS_COLOR = {
   rejected: 'bg-rose-200/30 text-rose-200',
 }
 
-const formatMoney = (value, currency = 'USD') => {
-  if (typeof value !== 'number') return 'Pending'
-  return new Intl.NumberFormat('en-US', {
+const formatMoney = (value, currency = 'USD', locale = 'en-US') => {
+  if (typeof value !== 'number') return ''
+  return new Intl.NumberFormat(locale || 'en-US', {
     style: 'currency',
     currency,
     minimumFractionDigits: 0,
@@ -21,28 +25,40 @@ const formatMoney = (value, currency = 'USD') => {
 }
 
 export default function CustomOrderCard({ order, role = 'customer' }) {
+  const { t, locale } = useLocale()
   const statusClass = STATUS_COLOR[order.status] || 'bg-muted text-white'
+  const statusKey = normalizeStatusKey(order.status)
+  const statusLabel = statusKey
+    ? t(`orders.status.${statusKey}`, humanizeStatus(order.status))
+    : humanizeStatus(order.status)
+  const paymentKey = normalizeStatusKey(order.paymentStatus)
+  const paymentLabel = paymentKey
+    ? t(`orders.status.${paymentKey}`, humanizeStatus(order.paymentStatus))
+    : order.paymentStatus || t('orders.status.pending', 'Pending')
+  const budgetValue = typeof order.quoteCents === 'number'
+    ? formatMoney(order.quoteCents, order.currency, locale)
+    : t('orders.status.pending', 'Pending')
 
   return (
     <article className="card p-5 flex flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-muted">Custom order</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-muted">{t('orders.card.title', 'Custom order')}</p>
           <h3 className="text-2xl font-serif">{order.title}</h3>
         </div>
-        <span className={`tag-chip ${statusClass}`}>{order.status.replace('_', ' ')}</span>
+        <span className={`tag-chip ${statusClass}`}>{statusLabel}</span>
       </div>
 
-      <p className="text-sm text-muted line-clamp-2">{order.description || 'Awaiting designer notes'}</p>
+      <p className="text-sm text-muted line-clamp-2">{order.description || t('orders.card.descriptionPlaceholder', 'Awaiting designer notes')}</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] text-muted">Budget</p>
-          <p className="text-lg font-serif">{formatMoney(order.quoteCents, order.currency)}</p>
+          <p className="text-xs uppercase tracking-[0.25em] text-muted">{t('orders.card.budget', 'Budget')}</p>
+          <p className="text-lg font-serif">{budgetValue}</p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] text-muted">Payment status</p>
-          <p className="text-lg font-serif text-white">{order.paymentStatus || 'pending'}</p>
+          <p className="text-xs uppercase tracking-[0.25em] text-muted">{t('orders.card.paymentStatus', 'Payment status')}</p>
+          <p className="text-lg font-serif text-white">{paymentLabel}</p>
         </div>
       </div>
 
@@ -50,13 +66,13 @@ export default function CustomOrderCard({ order, role = 'customer' }) {
 
       <div className="flex flex-wrap gap-3">
         <Link href={`/custom-order/${order.id}`} className="btn-primary">
-          View workspace
+          {t('actions.viewWorkspace', 'View workspace')}
         </Link>
         <Link href={`/custom-order/${order.id}#chat`} className="btn-secondary">
-          Open chat
+          {t('actions.openChat', 'Open chat')}
         </Link>
         {role === 'designer' && order.status === 'requested' && (
-          <span className="text-xs text-muted">New brief awaiting your quote.</span>
+          <span className="text-xs text-muted">{t('orders.card.designerReminder', 'New brief awaiting your quote.')}</span>
         )}
       </div>
     </article>

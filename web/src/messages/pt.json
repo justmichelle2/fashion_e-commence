@@ -1,0 +1,211 @@
+{
+  "app": {
+    "name": "LUXE Atelier"
+  },
+  "nav": {
+    "home": "Início",
+    "catalog": "Catálogo",
+    "designers": "Designers",
+    "customOrders": "Pedidos sob medida",
+    "profile": "Perfil",
+    "cart": "Carrinho",
+    "language": "Idioma",
+    "menu": "Menu"
+  },
+  "buttons": {
+    "exploreCatalog": "Explorar catálogo",
+    "bookFitting": "Agendar prova",
+    "signIn": "Entrar",
+    "viewAll": "Ver tudo",
+    "reserveLook": "Reservar look",
+    "book": "Agendar",
+    "view": "Ver",
+    "addToCart": "Adicionar ao carrinho",
+    "viewProduct": "Ver produto"
+  },
+  "hero": {
+    "title": "Luxo sob medida entregue ao mundo",
+    "subtitle": "Conecte-se a ateliers em vários continentes e acompanhe cada prova em um só lugar.",
+    "primaryCta": "Explorar catálogo",
+    "secondaryCta": "Agendar prova"
+  },
+  "Home": {
+    "stats": {
+      "ateliers": {
+        "label": "Ateliers pelo mundo",
+        "value": "120+",
+        "detail": "28 capitais da moda"
+      },
+      "fittings": {
+        "label": "Provas/mês",
+        "value": "1.4K",
+        "detail": "Concierge em tempo real"
+      },
+      "leadTime": {
+        "label": "Tempo médio",
+        "value": "9 dias",
+        "detail": "Produção prioritária"
+      },
+      "netZero": {
+        "label": "Parceiros neutros",
+        "value": "68",
+        "detail": "Cadeia certificada"
+      }
+    },
+    "capsules": {
+      "title": "Novas cápsulas",
+      "description": "Curadorias frescas toda quinta"
+    },
+    "categories": {
+      "title": "Humores por categoria",
+      "description": "Styling concierge, visitas a ateliers e entrega premium",
+      "items": {
+        "eveningwear": {
+          "title": "Noite",
+          "blurb": "Seda enviesada, corsets esculturais, bordados luminosos."
+        },
+        "tailoring": {
+          "title": "Alfaiataria",
+          "blurb": "Costuras arquitetônicas e looks dia-noite."
+        },
+        "resort": {
+          "title": "Resort",
+          "blurb": "Linho leve e paletas eco tingidas para viajantes."
+        },
+        "accessories": {
+          "title": "Acessórios",
+          "blurb": "Bolsas artesanais, joias esculturais, calçados couture."
+        }
+      }
+    },
+    "experiences": {
+      "title": "Experiências",
+      "description": "Drops imersivos, sourcing concierge, provas sob medida",
+      "items": {
+        "trunkshow": {
+          "title": "Trunkshows de designers",
+          "summary": "Transmita Lagos, Paris e Seul com chat ao vivo."
+        },
+        "fittings": {
+          "title": "Provas 3D",
+          "summary": "Aprove ajustes em renders fiéis ao corpo."
+        },
+        "concierge": {
+          "title": "Sourcing concierge",
+          "summary": "Envie referências e encontramos tecidos de arquivo em 48h."
+        }
+      },
+      "featuredLabel": "Em destaque"
+    },
+    "designers": {
+      "title": "Designers residentes",
+      "description": "Conheça os ateliers que moldam o luxo moderno"
+    },
+    "testimonials": {
+      "title": "Depoimentos",
+      "description": "Histórias da nossa clientela",
+      "items": {
+        "ama": {
+          "quote": "“Chat e prova 3D entregaram meu vestido impecável.”",
+          "author": "Ama T., Lagos"
+        },
+        "leila": {
+          "quote": "“O concierge de tecidos recriou um vestido icônico em três semanas.”",
+          "author": "Leila M., Dubai"
+        },
+        "jonas": {
+          "quote": "“Designer envia croquis direto para meus boards.”",
+          "author": "Jonas P., NYC"
+        }
+      }
+    }
+  },
+  "products": {
+    "sampleTitle": "Produto de exemplo",
+    "category": "Cápsula",
+    "availability": "Feito sob encomenda"
+  },
+  "theme": {
+    "toggle": "Alterar tema",
+    "day": "Dia",
+    "night": "Noite",
+    "label": "Tema"
+  },
+  "forms": {
+    "search": "Buscar",
+    "email": "E-mail"
+  },
+  "footer": {
+    "crafted": "Feito com cuidado • Ateliers globais e experiências sob medida",
+    "terms": "Termos",
+    "privacy": "Privacidade"
+  },
+  "errors": {
+    "generic": "Algo deu errado. Tente novamente.",
+    "offline": "Não foi possível acessar a rede de ateliers."
+  },
+  "common": {
+    "language": "Idioma",
+    "mode": "Modo"
+  },
+  "actions": {
+    "signIn": "Entrar",
+    "viewWorkspace": "Ver espaço de trabalho",
+    "openChat": "Abrir chat"
+  },
+  "designers": {
+    "card": {
+      "placeholderName": "Designer",
+      "placeholderBio": "Alfaiataria contemporânea e básicos refinados",
+      "tags": {
+        "readyToWear": "Pronto para vestir",
+        "bespoke": "Sob medida"
+      }
+    }
+  },
+  "orders": {
+    "card": {
+      "title": "Pedido sob medida",
+      "descriptionPlaceholder": "Aguardando notas do designer",
+      "budget": "Orçamento",
+      "paymentStatus": "Status do pagamento",
+      "designerReminder": "Novo briefing aguardando seu orçamento."
+    },
+    "status": {
+      "pending": "Pendente",
+      "requested": "Brief recebido",
+      "quoted": "Orçamento enviado",
+      "inProgress": "Em andamento",
+      "inProduction": "Em produção",
+      "delivered": "Entregue",
+      "completed": "Concluído",
+      "rejected": "Rejeitado"
+    },
+    "timeline": {
+      "requested": {
+        "label": "Brief enviado",
+        "description": "O cliente compartilhou inspiração e requisitos."
+      },
+      "quoted": {
+        "label": "Orçamento enviado",
+        "description": "O designer analisou e enviou preços."
+      },
+      "inProgress": {
+        "label": "Em andamento",
+        "description": "Esboços, provas e chats em movimento."
+      },
+      "inProduction": {
+        "label": "Em produção",
+        "description": "O ateliê está construindo a peça."
+      },
+      "delivered": {
+        "label": "Entregue",
+        "description": "A peça chegou com controle concierge."
+      },
+      "completed": {
+        "label": "Concluído",
+        "description": "Projeto encerrado e arquivado."
+      }
+    }
+  }
+}

@@ -6,13 +6,17 @@ import Card from '../app/components/ui/Card'
 import Badge from '../app/components/ui/Badge'
 import Button from '../app/components/ui/Button'
 import { formatPrice } from '../app/lib/price'
+import { useLocale } from './LocaleProvider'
 
 export default function ProductCard({ product = {} }){
-  const title = product?.title || 'Sample product'
+  const { t } = useLocale()
+  const title = product?.title || t('products.sampleTitle', 'Sample product')
   const price = formatPrice(product)
   const img = product?.image || product?.images?.[0] || '/images/sample1.svg'
   const isLocalAsset = typeof img === 'string' && img.startsWith('/')
   const href = `/product/${product?.id || 'sample'}`
+  const category = product?.category || t('products.category', 'Capsule')
+  const availability = product?.availability || t('products.availability', 'Made-to-order')
 
   return (
     <Card as="article" className="flex flex-col gap-4">
@@ -34,20 +38,20 @@ export default function ProductCard({ product = {} }){
       </Link>
       <div className="space-y-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-muted">{product?.category || 'Capsule'}</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-muted">{category}</p>
           <h3 className="mt-1 text-lg font-serif leading-tight">{title}</h3>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="font-semibold">{price}</span>
-          <span className="text-muted">{product?.availability || 'Made-to-order'}</span>
+          <span className="text-muted">{availability}</span>
         </div>
       </div>
       <div className="flex gap-3">
         <Button as={Link} href={href} className="flex-1" size="sm">
-          View
+          {t('buttons.view', 'View')}
         </Button>
         <Button variant="secondary" className="flex-1" size="sm">
-          Add to cart
+          {t('buttons.addToCart', 'Add to cart')}
         </Button>
       </div>
     </Card>

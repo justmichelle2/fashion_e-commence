@@ -6,19 +6,19 @@ import { useLocale } from './LocaleProvider'
 
 export default function Hero({ title, subtitle, ctas }) {
   const { t } = useLocale()
-  const computedTitle = title ?? t('home.hero.title', 'Made-to-measure luxury, shipped globally')
+  const computedTitle = title ?? t('hero.title', 'Made-to-measure luxury, shipped globally')
   const computedSubtitle =
     subtitle ??
     t(
-      'home.hero.subtitle',
+      'hero.subtitle',
       'Connect with ateliers across continents, commission one-of-a-kind looks, and track every fitting in a single place.',
     )
   const computedCtas =
     ctas && ctas.length
       ? ctas
       : [
-          { label: t('home.hero.primaryCta', 'Explore catalog'), href: '/catalog' },
-          { label: t('home.hero.secondaryCta', 'Book a fitting'), href: '/custom-order' },
+          { label: t('hero.primaryCta', 'Explore catalog'), href: '/catalog' },
+          { label: t('hero.secondaryCta', 'Book a fitting'), href: '/custom-order' },
         ]
 
   return (

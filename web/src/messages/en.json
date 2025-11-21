@@ -1,0 +1,211 @@
+{
+  "app": {
+    "name": "LUXE Atelier"
+  },
+  "nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "designers": "Designers",
+    "customOrders": "Custom Orders",
+    "profile": "Profile",
+    "cart": "Cart",
+    "language": "Language",
+    "menu": "Menu"
+  },
+  "buttons": {
+    "exploreCatalog": "Explore catalog",
+    "bookFitting": "Book a fitting",
+    "signIn": "Sign in",
+    "viewAll": "View all",
+    "reserveLook": "Reserve look",
+    "book": "Book",
+    "view": "View",
+    "addToCart": "Add to cart",
+    "viewProduct": "View product"
+  },
+  "hero": {
+    "title": "Made-to-measure luxury, shipped globally",
+    "subtitle": "Connect with ateliers across continents, commission one-of-a-kind looks, and track every fitting in a single place.",
+    "primaryCta": "Explore catalog",
+    "secondaryCta": "Book a fitting"
+  },
+  "Home": {
+    "stats": {
+      "ateliers": {
+        "label": "Ateliers worldwide",
+        "value": "120+",
+        "detail": "28 fashion capitals"
+      },
+      "fittings": {
+        "label": "Custom fittings/mo",
+        "value": "1.4K",
+        "detail": "Live concierge chats"
+      },
+      "leadTime": {
+        "label": "Avg. lead time",
+        "value": "9 days",
+        "detail": "Priority production"
+      },
+      "netZero": {
+        "label": "Net-zero partners",
+        "value": "68",
+        "detail": "Certified supply chain"
+      }
+    },
+    "capsules": {
+      "title": "The latest capsule drops",
+      "description": "Fresh edits added every Thursday"
+    },
+    "categories": {
+      "title": "Category moods",
+      "description": "Concierge styling, atelier visits, and white-glove delivery",
+      "items": {
+        "eveningwear": {
+          "title": "Eveningwear",
+          "blurb": "Bias-cut silk, sculpted corsetry, luminous beadwork."
+        },
+        "tailoring": {
+          "title": "Tailoring",
+          "blurb": "Architectural suiting and elevated day-to-night separates."
+        },
+        "resort": {
+          "title": "Resort",
+          "blurb": "Weightless linens and eco-dyed palettes for itinerant wardrobes."
+        },
+        "accessories": {
+          "title": "Accessories",
+          "blurb": "Limited-run artisan totes, sculptural jewelry, couture footwear."
+        }
+      }
+    },
+    "experiences": {
+      "title": "Experiences",
+      "description": "Immersive drops, concierge sourcing, bespoke fittings",
+      "items": {
+        "trunkshow": {
+          "title": "Designer trunkshows",
+          "summary": "Stream ateliers in Lagos, Paris, and Seoul with realtime chat."
+        },
+        "fittings": {
+          "title": "3D fittings",
+          "summary": "Approve pattern adjustments and pin notes on true-to-scale renders."
+        },
+        "concierge": {
+          "title": "Concierge sourcing",
+          "summary": "Upload tear sheets, we locate archival fabrics within 48h."
+        }
+      },
+      "featuredLabel": "Featured"
+    },
+    "designers": {
+      "title": "Resident designers",
+      "description": "Meet the ateliers shaping modern luxury"
+    },
+    "testimonials": {
+      "title": "Testimonials",
+      "description": "Stories from our clientele",
+      "items": {
+        "ama": {
+          "quote": "“The atelier chat and 3D fittings meant zero surprises. My bridal look arrived flawless.”",
+          "author": "Ama T., Lagos"
+        },
+        "leila": {
+          "quote": "“White-glove fabric sourcing helped me recreate a 90s archive gown in three weeks.”",
+          "author": "Leila M., Dubai"
+        },
+        "jonas": {
+          "quote": "“Designers upload sketches straight into my client boards—finally a single workspace.”",
+          "author": "Jonas P., NYC"
+        }
+      }
+    }
+  },
+  "products": {
+    "sampleTitle": "Sample product",
+    "category": "Capsule",
+    "availability": "Made-to-order"
+  },
+  "theme": {
+    "toggle": "Toggle color theme",
+    "day": "Day",
+    "night": "Night",
+    "label": "Theme"
+  },
+  "forms": {
+    "search": "Search",
+    "email": "Email address"
+  },
+  "footer": {
+    "crafted": "Crafted with care • Global ateliers & bespoke experiences",
+    "terms": "Terms",
+    "privacy": "Privacy"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please retry.",
+    "offline": "Unable to reach the atelier network. Check your connection."
+  },
+  "common": {
+    "language": "Language",
+    "mode": "Mode"
+  },
+  "actions": {
+    "signIn": "Sign in",
+    "viewWorkspace": "View workspace",
+    "openChat": "Open chat"
+  },
+  "designers": {
+    "card": {
+      "placeholderName": "Designer",
+      "placeholderBio": "Contemporary tailoring & elevated basics",
+      "tags": {
+        "readyToWear": "Ready-to-wear",
+        "bespoke": "Bespoke"
+      }
+    }
+  },
+  "orders": {
+    "card": {
+      "title": "Custom order",
+      "descriptionPlaceholder": "Awaiting designer notes",
+      "budget": "Budget",
+      "paymentStatus": "Payment status",
+      "designerReminder": "New brief awaiting your quote."
+    },
+    "status": {
+      "pending": "Pending",
+      "requested": "Requested",
+      "quoted": "Quoted",
+      "inProgress": "In progress",
+      "inProduction": "In production",
+      "delivered": "Delivered",
+      "completed": "Completed",
+      "rejected": "Rejected"
+    },
+    "timeline": {
+      "requested": {
+        "label": "Brief submitted",
+        "description": "Client shared inspiration and requirements."
+      },
+      "quoted": {
+        "label": "Quote sent",
+        "description": "Designer reviewed and sent pricing."
+      },
+      "inProgress": {
+        "label": "In progress",
+        "description": "Sketches, fittings, and chats in motion."
+      },
+      "inProduction": {
+        "label": "In production",
+        "description": "Atelier is constructing the garment."
+      },
+      "delivered": {
+        "label": "Delivered",
+        "description": "Piece arrived with concierge QA."
+      },
+      "completed": {
+        "label": "Completed",
+        "description": "Project closed out and archived."
+      }
+    }
+  }
+}
