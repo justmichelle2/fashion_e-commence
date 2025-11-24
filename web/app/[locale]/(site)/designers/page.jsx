@@ -1,5 +1,5 @@
-import DesignersClient from '../../components/designers/DesignersClient'
-import { getDesigners } from '../../lib/api'
+import DesignersClient from '../../../components/designers/DesignersClient'
+import { getDesigners } from '../../../lib/api'
 
 export const metadata = {
   title: 'Designers — Luxe Atelier',

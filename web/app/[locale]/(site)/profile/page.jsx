@@ -1,6 +1,9 @@
 import dynamic from 'next/dynamic'
 
-const ProfileClient = dynamic(() => import('../../components/profile/ProfileClient'), { ssr: false })
+const ProfileClient = dynamic(
+  () => import('../../../components/profile/ProfileClient'),
+  { ssr: false }
+)
 
 export const metadata = {
   title: 'Profile — Luxe Atelier',

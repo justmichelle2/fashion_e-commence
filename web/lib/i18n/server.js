@@ -1,8 +1,8 @@
 import { cookies, headers } from 'next/headers'
 import { DEFAULT_LOCALE, LOCALE_COOKIE, SUPPORTED_LOCALES, normalizeLocale } from '../../i18n/settings'
-import { detectFromAcceptLanguage, resolveLocale } from './detect-locale'
+import { resolveLocale } from './detect-locale'
 
-export function detectRequestLocale() {
+export function resolveActiveLocale() {
   const cookieStore = cookies()
   const cookieLocale = cookieStore.get(LOCALE_COOKIE)?.value || ''
   const acceptLanguage = headers().get('accept-language') || ''
@@ -10,11 +10,11 @@ export function detectRequestLocale() {
   return normalizeLocale(locale)
 }
 
-export function getLocaleMetadata(locale) {
+export function lookupLocaleMetadata(locale) {
   const normalized = normalizeLocale(locale)
   return SUPPORTED_LOCALES.find((entry) => entry.code === normalized) ?? {
     code: DEFAULT_LOCALE,
     dir: 'ltr',
-    label: 'English',
+    label: '한국어',
   }
 }

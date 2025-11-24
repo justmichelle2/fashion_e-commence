@@ -45,13 +45,13 @@ async function listLocales(req, res) {
   res.json({ locales: SUPPORTED_LOCALES, defaultLocale: DEFAULT_LOCALE })
 }
 
-async function getLocaleMessages(req, res) {
+async function fetchLocaleMessages(req, res) {
   try {
     const locale = normalizeLocale(req.params.locale)
     const messages = await loadMessages(locale)
     res.json({ locale, messages })
   } catch (err) {
-    console.error('getLocaleMessages error', err)
+    console.error('fetchLocaleMessages error', err)
     res.status(500).json({ error: 'Unable to load locale messages' })
   }
 }
@@ -84,7 +84,7 @@ async function updatePreferredLocale(req, res) {
 
 module.exports = {
   listLocales,
-  getLocaleMessages,
+  fetchLocaleMessages,
   updatePreferredLocale,
   SUPPORTED_LOCALES,
   DEFAULT_LOCALE,

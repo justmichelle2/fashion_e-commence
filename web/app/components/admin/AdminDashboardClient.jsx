@@ -1,6 +1,6 @@
 "use client"
 
-import Link from 'next/link'
+import { Link } from '@/navigation'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Container from '../ui/Container'

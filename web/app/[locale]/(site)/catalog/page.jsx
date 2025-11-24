@@ -1,5 +1,5 @@
-import CatalogClient from '../../components/catalog/CatalogClient'
-import { getProducts } from '../../lib/api'
+import CatalogClient from '../../../components/catalog/CatalogClient'
+import { getProducts } from '../../../lib/api'
 
 export const metadata = {
   title: 'Catalog — Luxe Atelier',

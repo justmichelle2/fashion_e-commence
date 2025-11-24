@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/navigation'
 import Card from '../ui/Card'
 import Container from '../ui/Container'
 import Button from '../ui/Button'

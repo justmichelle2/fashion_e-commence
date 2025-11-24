@@ -1,8 +1,6 @@
-import './globals.css'
-
 export const metadata = {
-  title: 'Luxe Atelier',
-  description: 'Global fashion marketplace for premium designers',
+  title: 'Fashion E-Commerce',
+  description: 'My project',
 }
 
 export default function RootLayout({ children }) {

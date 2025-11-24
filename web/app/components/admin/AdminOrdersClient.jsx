@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/navigation'
 import { useRouter } from 'next/navigation'
 import Container from '../ui/Container'
 import Card from '../ui/Card'

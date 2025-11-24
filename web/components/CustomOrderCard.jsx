@@ -1,6 +1,6 @@
 "use client"
 
-import Link from 'next/link'
+import { Link } from '@/navigation'
 import CustomOrderTimeline from './CustomOrderTimeline'
 import { useLocale } from './LocaleProvider'
 import { normalizeStatusKey, humanizeStatus } from './orderStatus'

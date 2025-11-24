@@ -1,17 +1,17 @@
 export const SUPPORTED_LOCALES = [
-  { code: 'en', label: 'English', dir: 'ltr' },
-  { code: 'fr', label: 'Français', dir: 'ltr' },
-  { code: 'es', label: 'Español', dir: 'ltr' },
-  { code: 'de', label: 'Deutsch', dir: 'ltr' },
-  { code: 'zh', label: '中文', dir: 'ltr' },
   { code: 'ar', label: 'العربية', dir: 'rtl' },
-  { code: 'pt', label: 'Português', dir: 'ltr' },
+  { code: 'de', label: 'Deutsch', dir: 'ltr' },
+  { code: 'en', label: 'English', dir: 'ltr' },
+  { code: 'es', label: 'Español', dir: 'ltr' },
+  { code: 'fr', label: 'Français', dir: 'ltr' },
   { code: 'it', label: 'Italiano', dir: 'ltr' },
   { code: 'ja', label: '日本語', dir: 'ltr' },
-  { code: 'ko', label: '한국어', dir: 'ltr' }
+  { code: 'ko', label: '한국어', dir: 'ltr' },
+  { code: 'pt', label: 'Português', dir: 'ltr' },
+  { code: 'zh', label: '中文', dir: 'ltr' },
 ]
 
-export const DEFAULT_LOCALE = 'en'
+export const DEFAULT_LOCALE = 'ko'
 export const LOCALE_COOKIE = 'NEXT_LOCALE'
 export const LOCALE_STORAGE_KEY = 'luxe-preferred-locale'
 
@@ -27,7 +27,7 @@ export function normalizeLocale(value, fallback = DEFAULT_LOCALE) {
   return isSupportedLocale(normalized) ? normalized : fallback
 }
 
-export function getLocaleDirection(value) {
+export function directionForLocale(value) {
   const match = SUPPORTED_LOCALES.find((entry) => entry.code === value)
   return match?.dir ?? 'ltr'
 }
