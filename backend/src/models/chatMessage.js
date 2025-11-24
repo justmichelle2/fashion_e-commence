@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
     customOrderId: { type: DataTypes.UUID, allowNull: false },
     senderId: { type: DataTypes.UUID, allowNull: false },
     message: { type: DataTypes.TEXT, allowNull: false },
-    attachmentUrls: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] }
+    attachmentUrls: { type: DataTypes.JSON, defaultValue: [] }
   }, {
     tableName: 'chat_messages',
     timestamps: true

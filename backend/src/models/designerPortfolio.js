@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
     designerId: { type: DataTypes.UUID, allowNull: false },
     title: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.TEXT },
-    images: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
+    images: { type: DataTypes.JSON, defaultValue: [] },
     visibility: { type: DataTypes.ENUM('public', 'private'), defaultValue: 'public' },
     featured: { type: DataTypes.BOOLEAN, defaultValue: false },
   }, {

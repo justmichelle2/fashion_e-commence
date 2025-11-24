@@ -2,7 +2,8 @@ const { Sequelize } = require('sequelize');
 const config = require('../config/config');
 
 const sequelize = new Sequelize(config.databaseUrl, {
-  dialect: 'postgres',
+  dialect: config.dialect,
+  storage: config.storage,
   logging: false,
 });
 // Initialize models

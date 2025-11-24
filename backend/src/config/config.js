@@ -18,4 +18,6 @@ module.exports = {
   dbIsLocal,
   jwtSecret: process.env.JWT_SECRET || 'devsecret',
   stripeKey: process.env.STRIPE_SECRET_KEY || '',
+  dialect: databaseUrl.startsWith('sqlite') ? 'sqlite' : 'postgres',
+  storage: databaseUrl.startsWith('sqlite') ? databaseUrl.replace('sqlite:', '') : undefined,
 };

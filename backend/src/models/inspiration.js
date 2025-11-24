@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
     title: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.TEXT },
     visibility: { type: DataTypes.ENUM('public', 'private'), defaultValue: 'public' },
-    media: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
+    media: { type: DataTypes.JSON, defaultValue: [] },
   }, {
     tableName: 'inspirations',
     timestamps: true,

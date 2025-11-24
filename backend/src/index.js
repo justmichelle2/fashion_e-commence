@@ -7,17 +7,17 @@ const os = require('os');
 const START_PORT = parseInt(process.env.PORT, 10) || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-async function start(){
-  try{
+async function start() {
+  try {
     await sequelize.authenticate();
     console.log('Database connected');
-    await sequelize.sync({ alter: true }); // sync models
+    await sequelize.sync(); // sync models
 
     let port = START_PORT;
     const maxAttempts = 20;
 
-    for (let attempt = 0; attempt < maxAttempts; attempt++){
-      try{
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
         // Wrap listen in a promise so we can catch asynchronous 'error' events
         await new Promise((resolve, reject) => {
           const server = app.listen(port, HOST, () => {
@@ -38,8 +38,8 @@ async function start(){
 
         // success — exit the start function
         return;
-      }catch(err){
-        if (err && err.code === 'EADDRINUSE'){
+      } catch (err) {
+        if (err && err.code === 'EADDRINUSE') {
           console.warn(`Port ${port} in use, trying port ${port + 1}...`);
           port += 1;
           continue;
@@ -48,8 +48,8 @@ async function start(){
       }
     }
 
-    throw new Error(`Unable to bind to a port in range ${START_PORT}-${START_PORT+maxAttempts}`);
-  }catch(err){
+    throw new Error(`Unable to bind to a port in range ${START_PORT}-${START_PORT + maxAttempts}`);
+  } catch (err) {
     console.error('Failed to start', err);
     process.exit(1);
   }

@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
     title: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.TEXT },
     coverImage: { type: DataTypes.STRING },
-    tags: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
+    tags: { type: DataTypes.JSON, defaultValue: [] },
     basePriceCents: { type: DataTypes.INTEGER, defaultValue: 0 }
   }, {
     tableName: 'designer_templates',
