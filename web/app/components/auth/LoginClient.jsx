@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Link } from '@/navigation'
 import Container from '../ui/Container'
@@ -17,6 +17,7 @@ export default function LoginClient() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [submitting, setSubmitting] = useState(false)
+    const [loggedIn, setLoggedIn] = useState(false)
 
     async function submit(e) {
         e.preventDefault()
@@ -24,13 +25,19 @@ export default function LoginClient() {
         setSubmitting(true)
         try {
             await login({ email, password })
-            router.push(redirect)
+            setLoggedIn(true)
         } catch (err) {
             setError(err.message || 'Login failed')
         } finally {
             setSubmitting(false)
         }
     }
+
+    useEffect(() => {
+        if (loggedIn && status === 'authenticated') {
+            router.push(redirect)
+        }
+    }, [loggedIn, status, router, redirect])
 
     return (
         <Container className="w-1/2 mx-auto py-20">

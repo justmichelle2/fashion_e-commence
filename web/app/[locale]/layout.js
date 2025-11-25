@@ -1,4 +1,5 @@
-import Navbar from '../../components/Navbar'
+import dynamic from 'next/dynamic'
+const Navbar = dynamic(() => import('../../components/Navbar'), { ssr: false })
 import Footer from '../../components/Footer'
 import ThemeProvider from '../../components/ThemeProvider'
 import { SessionProvider } from '../../components/SessionProvider'

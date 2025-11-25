@@ -38,13 +38,16 @@ async function createTestUsers() {
 
             if (user) {
                 user.role = userData.role;
+                user.passwordHash = await bcrypt.hash(userData.password, 10);
                 await user.save();
-                console.log(`✓ Updated ${userData.email} to ${userData.role}`);
+                console.log(`✓ Updated ${userData.email} to ${userData.role} and reset password`);
             } else {
                 const hashedPassword = await bcrypt.hash(userData.password, 10);
+                // Remove plaintext password from userData before creating
+                const { password, ...userFields } = userData;
                 await User.create({
-                    ...userData,
-                    password: hashedPassword
+                    ...userFields,
+                    passwordHash: hashedPassword
                 });
                 console.log(`✓ Created ${userData.email} as ${userData.role}`);
             }
