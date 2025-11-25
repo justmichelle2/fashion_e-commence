@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-const ThemeContext = createContext({ theme: 'dark', toggleTheme: () => {} })
+const ThemeContext = createContext({ theme: 'dark', toggleTheme: () => { } })
 const STORAGE_KEY = 'luxe-theme'
 
 function getPreferredTheme(defaultTheme = 'dark') {
@@ -22,11 +22,13 @@ function getPreferredTheme(defaultTheme = 'dark') {
 }
 
 export function ThemeProvider({ children, defaultTheme = 'dark' }) {
-  const [theme, setTheme] = useState(() => getPreferredTheme(defaultTheme))
+  const [theme, setTheme] = useState(defaultTheme)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const nextTheme = getPreferredTheme(defaultTheme)
-    setTheme((current) => (current === nextTheme ? current : nextTheme))
+    setMounted(true)
+    const preferredTheme = getPreferredTheme(defaultTheme)
+    setTheme(preferredTheme)
   }, [defaultTheme])
 
   useEffect(() => {

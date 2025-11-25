@@ -8,7 +8,7 @@ import Button from '../app/components/ui/Button'
 import { formatPrice } from '../app/lib/price'
 import { useLocale } from './LocaleProvider'
 
-export default function ProductCard({ product = {} }){
+export default function ProductCard({ product = {} }) {
   const { t } = useLocale()
   const title = product?.title || t('products.sampleTitle', 'Sample product')
   const price = formatPrice(product)
@@ -46,13 +46,23 @@ export default function ProductCard({ product = {} }){
           <span className="text-muted">{availability}</span>
         </div>
       </div>
-      <div className="flex gap-3">
-        <Button as={Link} href={href} className="flex-1" size="sm">
-          {t('buttons.view', 'View')}
-        </Button>
-        <Button variant="secondary" className="flex-1" size="sm">
-          {t('buttons.addToCart', 'Add to cart')}
-        </Button>
+      <div className="flex items-center gap-3">
+        <button
+          className="p-2 rounded-lg border border-card-border hover:bg-card-hover transition-colors"
+          aria-label="Like this product"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
+        <div className="flex-1 flex gap-3">
+          <Button as={Link} href={href} className="flex-1" size="sm">
+            {t('buttons.view', 'View')}
+          </Button>
+          <Button variant="secondary" className="flex-1" size="sm">
+            {t('buttons.addToCart', 'Add to cart')}
+          </Button>
+        </div>
       </div>
     </Card>
   )

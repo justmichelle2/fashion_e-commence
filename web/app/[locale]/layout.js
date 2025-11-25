@@ -29,8 +29,8 @@ export default async function LocaleLayout({ children, params }) {
   const { dir } = lookupLocaleMetadata(requested)
 
   return (
-    <html lang={requested} dir={dir}>
-      <body>
+    <html lang={requested} dir={dir} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <LocaleProvider locale={requested} messages={messages}>
           <ThemeProvider>
             <SessionProvider>

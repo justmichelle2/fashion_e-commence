@@ -2,8 +2,10 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { Link } from '@/navigation'
+import { usePathname } from 'next/navigation'
 import ThemeToggle from './ThemeToggle'
 import { useLocale } from './LocaleProvider'
+import { useSession } from './SessionProvider'
 
 const NAV_LINKS = [
   { href: '/', labelKey: 'nav.home', fallback: 'Home' },
@@ -63,7 +65,9 @@ function CartIcon({ className = 'h-4 w-4' }) {
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
   const { t, locale, availableLocales, changeLocale } = useLocale()
+  const { user, logout } = useSession()
 
   const localeOptions = useMemo(() => {
     if (availableLocales && availableLocales.length) return availableLocales
@@ -75,6 +79,8 @@ export default function Navbar() {
     [t],
   )
 
+  const isAuthPage = pathname?.includes('/login') || pathname?.includes('/register')
+
   const desktopActions = (
     <div className="hidden md:flex items-center gap-3">
       <LocaleSwitcher
@@ -84,13 +90,24 @@ export default function Navbar() {
         label={t('common.language', 'Language')}
       />
       <ThemeToggle />
-      <Link href="/login" className="btn-secondary">
-        {t('actions.signIn', 'Sign in')}
-      </Link>
-      <Link href="/cart" className="btn-primary gap-3">
-        <CartIcon />
-        {t('nav.cart', 'Cart')}
-      </Link>
+      {user ? (
+        <>
+          <Link href="/profile" className="btn-secondary">
+            {user.name || 'Profile'}
+          </Link>
+          <button onClick={() => logout()} className="btn-secondary">
+            Logout
+          </button>
+          <Link href="/cart" className="btn-primary gap-3">
+            <CartIcon />
+            {t('nav.cart', 'Cart')}
+          </Link>
+        </>
+      ) : !isAuthPage ? (
+        <Link href="/login" className="btn-secondary">
+          {t('actions.signIn', 'Sign in')}
+        </Link>
+      ) : null}
     </div>
   )
 
@@ -108,13 +125,15 @@ export default function Navbar() {
           LUXE
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="nav-link">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {user && (
+          <nav className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="nav-link">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        )}
 
         {desktopActions}
 
@@ -139,19 +158,26 @@ export default function Navbar() {
               <ThemeToggle />
             </div>
             {mobileLocaleSwitcher}
-            {navItems.map((item) => (
+            {user && navItems.map((item) => (
               <Link key={item.href} href={item.href} className="block" onClick={() => setOpen(false)}>
                 {item.label}
               </Link>
             ))}
             <div className="flex gap-2 pt-2">
-              <Link href="/login" className="btn-secondary w-1/2 text-center" onClick={() => setOpen(false)}>
-                {t('actions.signIn', 'Sign in')}
-              </Link>
-              <Link href="/cart" className="btn-primary w-1/2 text-center gap-2" onClick={() => setOpen(false)}>
-                <CartIcon className="mx-auto h-4 w-4" />
-                {t('nav.cart', 'Cart')}
-              </Link>
+              {user ? (
+                <>
+                  <Link href="/profile" className="btn-secondary w-1/2 text-center" onClick={() => setOpen(false)}>
+                    {user.name || 'Profile'}
+                  </Link>
+                  <button onClick={() => { logout(); setOpen(false); }} className="btn-secondary w-1/2">
+                    Logout
+                  </button>
+                </>
+              ) : !isAuthPage ? (
+                <Link href="/login" className="btn-secondary w-full text-center" onClick={() => setOpen(false)}>
+                  {t('actions.signIn', 'Sign in')}
+                </Link>
+              ) : null}
             </div>
           </div>
         </div>

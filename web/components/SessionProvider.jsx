@@ -6,13 +6,14 @@ const SessionContext = createContext({
   user: null,
   token: null,
   status: 'idle',
-  login: async () => {},
-  register: async () => {},
-  updateProfile: async () => {},
-  logout: () => {},
+  login: async () => { },
+  register: async () => { },
+  updateProfile: async () => { },
+  logout: () => { },
 })
 
 const STORAGE_KEY = 'luxe-session-token'
+const API_BASE_URL = 'http://localhost:5000'
 
 async function fetchJson(endpoint, { token, ...options } = {}) {
   const headers = {
@@ -22,7 +23,10 @@ async function fetchJson(endpoint, { token, ...options } = {}) {
   }
   if (token) headers.Authorization = `Bearer ${token}`
 
-  const res = await fetch(endpoint, { ...options, headers })
+  // Prepend base URL if endpoint is relative
+  const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`
+
+  const res = await fetch(url, { ...options, headers })
   const contentType = res.headers.get('content-type') || ''
   const isJson = contentType.includes('application/json')
   const raw = await res.text()

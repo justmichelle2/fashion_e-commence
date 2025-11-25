@@ -1,124 +1,104 @@
 'use client'
 
-import { Link } from '@/navigation'
+import { useState } from 'react'
 import Image from 'next/image'
-import DesignerCard from '../../../components/DesignerCard'
+import { Link } from '@/navigation'
 import Container from '../ui/Container'
-import AutoGrid from '../ui/AutoGrid'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
-import SectionHeading from '../ui/SectionHeading'
 import Badge from '../ui/Badge'
-
-const STATS = [
-  { value: '87', label: 'Emerging voices' },
-  { value: '42', label: 'Heritage houses' },
-  { value: '5', label: 'Continents represented' },
-]
-
-const FEATURE_STORIES = [
-  {
-    title: 'Atelier Lagos',
-    summary: 'Hand-painted silks and ceremonial looks for modern weddings.',
-    image: '/images/sample2.svg',
-  },
-  {
-    title: 'Nordic knit lab',
-    summary: 'Experimental knitwear with biodegradable yarns.',
-    image: '/images/sample3.svg',
-  },
-]
+import AutoGrid from '../ui/AutoGrid'
+import { useSession } from '../../../components/SessionProvider'
 
 export default function DesignersClient({ designers = [] }) {
+  const { user } = useSession()
+  const [following, setFollowing] = useState(new Set())
+
+  const handleFollow = (designerId) => {
+    setFollowing(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(designerId)) {
+        newSet.delete(designerId)
+      } else {
+        newSet.add(designerId)
+      }
+      return newSet
+    })
+    // TODO: Call API to persist follow status
+  }
+
   return (
-    <div className="space-y-12 pb-16">
-      <Container className="space-y-6">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="lg:w-3/5 space-y-4">
-            <p className="text-xs uppercase tracking-[0.25em] text-muted">Designers</p>
-            <h1 className="text-4xl md:text-5xl font-serif">Meet the ateliers redefining luxury</h1>
-            <p className="text-muted">
-              From bespoke suiting in Lagos to experimental knitwear in Copenhagen, collaborate with verified studios and track every fitting from your dashboard.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Button as={Link} href="/custom-order">
-              Start commission
-            </Button>
-            <Button as={Link} href="/stories" variant="secondary">
-              Read profiles
-            </Button>
-          </div>
-        </div>
+    <Container className="py-16 space-y-8">
+      <div className="space-y-2">
+        <h1 className="text-4xl font-serif">Our Designers</h1>
+        <p className="text-muted max-w-2xl">
+          Collaborate with verified designers from around the world. Each brings unique expertise and craftsmanship.
+        </p>
+      </div>
 
-        <AutoGrid cols="grid-cols-1 md:grid-cols-3">
-          {STATS.map((stat) => (
-            <Card key={stat.label} className="p-6 text-center space-y-2">
-              <p className="text-3xl font-serif">{stat.value}</p>
-              <p className="text-xs uppercase tracking-[0.25em] text-muted">{stat.label}</p>
-            </Card>
-          ))}
-        </AutoGrid>
-      </Container>
+      <AutoGrid cols="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {designers.length === 0 && (
+          <Card className="col-span-full text-center p-12">
+            <p className="text-muted">No designers available yet.</p>
+          </Card>
+        )}
 
-      <Container className="space-y-6">
-        <SectionHeading
-          title="Resident studios"
-          description="Your personal concierge can intro you within minutes"
-        />
-        <AutoGrid>
-          {designers.map((designer) => (
-            <DesignerCard key={designer.id} designer={designer} />
-          ))}
-        </AutoGrid>
-      </Container>
+        {designers.map((designer) => (
+          <Card key={designer.id} className="flex flex-col gap-4">
+            <Link href={`/designers/${designer.id}`} className="relative block w-full overflow-hidden rounded-2xl">
+              <div className="relative h-64">
+                <Image
+                  src={designer.avatar || '/images/sample1.svg'}
+                  alt={designer.name}
+                  fill
+                  className="object-cover"
+                  unoptimized={!designer.avatar?.startsWith('/')}
+                />
+              </div>
+            </Link>
 
-      <Container className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <Card className="space-y-4">
-          <h3 className="text-2xl font-serif">Open call for designers</h3>
-          <p className="text-muted">
-            Showcase your capsule collection to a global membership that values sustainability, craftsmanship, and provenance.
-          </p>
-          <ul className="list-disc list-inside space-y-2 text-sm text-muted">
-            <li>Concierge onboarding with payout automation.</li>
-            <li>Live chat with clients plus AR fitting approvals.</li>
-            <li>Access to our carbon-neutral logistics network.</li>
-          </ul>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button as={Link} href="/designer/apply" className="flex-1 justify-center">
-              Apply to join
-            </Button>
-            <Button
-              as={Link}
-              href="mailto:curation@luxeatelier.com"
-              variant="secondary"
-              className="flex-1 justify-center"
-            >
-              Speak with curation
-            </Button>
-          </div>
-        </Card>
-        <Card className="space-y-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-muted">Spotlight</p>
-            <h3 className="text-lg font-serif">Featured ateliers</h3>
-          </div>
-          <div className="space-y-4">
-            {FEATURE_STORIES.map((story) => (
-              <article key={story.title} className="flex gap-4">
-                <div className="relative h-16 w-16 overflow-hidden rounded-2xl">
-                  <Image src={story.image} alt={story.title} fill className="object-cover" />
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-xl font-serif">{designer.name}</h3>
+                <p className="text-sm text-muted">{designer.location || 'Global'}</p>
+              </div>
+
+              {designer.specialties && (
+                <div className="flex flex-wrap gap-2">
+                  {designer.specialties.slice(0, 3).map((specialty, i) => (
+                    <Badge key={i} variant="secondary">{specialty}</Badge>
+                  ))}
                 </div>
-                <div>
-                  <p className="text-sm font-semibold">{story.title}</p>
-                  <p className="text-xs text-muted">{story.summary}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-          <Badge variant="accent" className="self-start">Weekly curation</Badge>
-        </Card>
-      </Container>
-    </div>
+              )}
+
+              <p className="text-sm text-muted line-clamp-2">
+                {designer.bio || 'Expert fashion designer'}
+              </p>
+
+              <div className="flex gap-2">
+                <Button
+                  as={Link}
+                  href={`/designers/${designer.id}`}
+                  className="flex-1"
+                  size="sm"
+                >
+                  View Profile
+                </Button>
+                {user && (
+                  <Button
+                    variant={following.has(designer.id) ? 'primary' : 'secondary'}
+                    size="sm"
+                    onClick={() => handleFollow(designer.id)}
+                    className="px-4"
+                  >
+                    {following.has(designer.id) ? 'Following' : 'Follow'}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </AutoGrid>
+    </Container>
   )
 }

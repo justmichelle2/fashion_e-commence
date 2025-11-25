@@ -31,7 +31,10 @@ function LocaleBridge({ children }) {
       } catch (error) {
         console.warn('Failed to persist locale preference', error)
       }
-      router.refresh()
+      // Get current path without locale prefix
+      const currentPath = window.location.pathname.replace(`/${locale}`, '') || '/'
+      // Navigate to the same path with new locale
+      router.push(`/${normalized}${currentPath}`)
       return normalized
     },
     [availableLocales, locale, router]

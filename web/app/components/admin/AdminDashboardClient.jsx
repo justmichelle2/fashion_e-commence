@@ -25,7 +25,7 @@ export default function AdminDashboardClient() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace(`/account/login?redirect=${encodeURIComponent('/admin')}`)
+      router.replace(`/login?redirect=${encodeURIComponent('/admin')}`)
     } else if (status === 'authenticated' && !isAdmin) {
       router.replace('/')
     }
