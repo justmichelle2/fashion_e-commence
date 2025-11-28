@@ -6,6 +6,7 @@ import { SessionProvider } from '../../components/SessionProvider'
 import LocaleProvider from '../../components/LocaleProvider'
 import CurrencyProvider from '../../components/CurrencyProvider'
 import WishlistProvider from '../../components/WishlistProvider'
+import SocketProvider from '../../components/SocketProvider'
 import { lookupLocaleMetadata } from '../../lib/i18n/server'
 import { loadMessages } from '../../lib/i18n/load-messages'
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, normalizeLocale } from '../../i18n/settings'
@@ -38,17 +39,19 @@ export default async function LocaleLayout({ children, params }) {
       <CurrencyProvider initialCurrency={currencyCookie}>
         <ThemeProvider>
           <SessionProvider>
-            <WishlistProvider>
-              <div className="absolute inset-0 pointer-events-none opacity-60" aria-hidden>
-                <div className="theme-glow theme-glow--left" />
-                <div className="theme-glow theme-glow--right" />
-              </div>
-              <div className="relative min-h-screen flex flex-col" dir={dir}>
-                <Navbar />
-                <main className="flex-1 py-8">{children}</main>
-                <Footer />
-              </div>
-            </WishlistProvider>
+            <SocketProvider>
+              <WishlistProvider>
+                <div className="absolute inset-0 pointer-events-none opacity-60" aria-hidden>
+                  <div className="theme-glow theme-glow--left" />
+                  <div className="theme-glow theme-glow--right" />
+                </div>
+                <div className="relative min-h-screen flex flex-col" dir={dir}>
+                  <Navbar />
+                  <main className="flex-1 py-8">{children}</main>
+                  <Footer />
+                </div>
+              </WishlistProvider>
+            </SocketProvider>
           </SessionProvider>
         </ThemeProvider>
       </CurrencyProvider>

@@ -1,4 +1,4 @@
-import DashboardClient from '../../../components/dashboard/DashboardClient'
+import DashboardClient from '@/app/components/dashboard/DashboardClient'
 
 export const metadata = {
     title: 'Dashboard — Luxe Atelier',

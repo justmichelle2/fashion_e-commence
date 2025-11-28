@@ -1,142 +1,178 @@
-'use client'
-
-import { useEffect } from 'react'
-import { Link, useRouter } from '@/navigation'
-import Container from '../ui/Container'
-import Card from '../ui/Card'
-import Button from '../ui/Button'
-import Badge from '../ui/Badge'
-import AutoGrid from '../ui/AutoGrid'
-import { useSession } from '../../../components/SessionProvider'
-import { useLocale } from '@/components/LocaleProvider'
+"use client";
+import React from 'react';
+import Link from 'next/link';
+import {
+    TrendingUp,
+    Users,
+    ShoppingBag,
+    DollarSign,
+    ArrowUpRight,
+    ArrowDownRight,
+    Clock,
+    CheckCircle,
+    AlertCircle
+} from 'lucide-react';
+import Button from '@/components/Button';
+import Avatar from '@/components/Avatar';
+import { useSession } from 'next-auth/react';
 
 export default function DashboardClient({ orders = [], stats = {} }) {
-    const router = useRouter()
-    const { user, status } = useSession()
-    const { locale } = useLocale()
+    const { data: session } = useSession();
+    const isDesigner = session?.user?.role === 'designer';
 
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            router.replace(`/login?redirect=${encodeURIComponent(`/${locale}/dashboard`)}`)
+    const statCards = [
+        {
+            title: 'Total Revenue',
+            value: `$${stats.revenue || '0.00'}`,
+            change: '+12.5%',
+            trend: 'up',
+            icon: DollarSign,
+            color: 'bg-green-500'
+        },
+        {
+            title: 'Active Orders',
+            value: stats.pending || '0',
+            change: '-2.4%',
+            trend: 'down',
+            icon: ShoppingBag,
+            color: 'bg-blue-500'
+        },
+        {
+            title: 'Total Customers',
+            value: '1,234', // Mock for now
+            change: '+5.2%',
+            trend: 'up',
+            icon: Users,
+            color: 'bg-purple-500'
+        },
+        {
+            title: 'Avg. Order Value',
+            value: '$345', // Mock for now
+            change: '+3.1%',
+            trend: 'up',
+            icon: TrendingUp,
+            color: 'bg-orange-500'
         }
-    }, [status, router, locale])
-
-    if (status === 'loading') {
-        return (
-            <Container className="py-24 text-center">
-                <p className="text-muted">Loading dashboard...</p>
-            </Container>
-        )
-    }
-
-    if (!user) return null
-
-    const isDesigner = user.role === 'designer'
+    ];
 
     return (
-        <Container className="py-12 space-y-8">
+        <div className="space-y-8">
             {/* Header */}
-            <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                <h1 className="text-4xl font-serif">
-                    {isDesigner ? 'Designer Dashboard' : 'My Dashboard'}
-                </h1>
-                <p className="text-muted mt-2">
-                    {isDesigner
-                        ? 'Manage your commissions, portfolio, and clients'
-                        : 'Track your orders and custom requests'
-                    }
-                </p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                        Welcome back, {session?.user?.name?.split(' ')[0] || 'Designer'}
+                    </h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Here's what's happening with your store today.
+                    </p>
                 </div>
-                <Button as={Link} href="/profile" variant="secondary" size="sm">
-                    Edit profile
-                </Button>
+                <div className="flex gap-3">
+                    <Button variant="outline">Download Report</Button>
+                    <Button>Create New Product</Button>
+                </div>
             </div>
 
-            {/* Stats */}
-            <AutoGrid cols="grid-cols-1 md:grid-cols-4">
-                <Card className="p-6 text-center">
-                    <p className="text-3xl font-serif">{stats.totalOrders || 0}</p>
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted mt-2">
-                        {isDesigner ? 'Active Commissions' : 'Total Orders'}
-                    </p>
-                </Card>
-                <Card className="p-6 text-center">
-                    <p className="text-3xl font-serif">{stats.pending || 0}</p>
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted mt-2">
-                        Pending
-                    </p>
-                </Card>
-                <Card className="p-6 text-center">
-                    <p className="text-3xl font-serif">{stats.completed || 0}</p>
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted mt-2">
-                        Completed
-                    </p>
-                </Card>
-                <Card className="p-6 text-center">
-                    <p className="text-3xl font-serif">${stats.revenue || 0}</p>
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted mt-2">
-                        {isDesigner ? 'Total Earnings' : 'Total Spent'}
-                    </p>
-                </Card>
-            </AutoGrid>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {statCards.map((stat, index) => (
+                    <div key={index} className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className={`p-2 rounded-lg ${stat.color} bg-opacity-10 text-${stat.color.split('-')[1]}-600`}>
+                                <stat.icon className="h-5 w-5" />
+                            </div>
+                            <span className={`flex items-center text-xs font-medium ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                                }`}>
+                                {stat.change}
+                                {stat.trend === 'up' ? <ArrowUpRight className="h-3 w-3 ml-1" /> : <ArrowDownRight className="h-3 w-3 ml-1" />}
+                            </span>
+                        </div>
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{stat.title}</h3>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{stat.value}</p>
+                    </div>
+                ))}
+            </div>
 
-            {/* Quick Actions */}
-            <Card className="p-6">
-                <h2 className="text-2xl font-serif mb-4">Quick Actions</h2>
-                <div className="flex flex-wrap gap-3">
-                    {isDesigner ? (
-                        <>
-                            <Button as={Link} href="/portfolio">Manage Portfolio</Button>
-                            <Button as={Link} href="/messages" variant="secondary">View Messages</Button>
-                            <Button as={Link} href="/profile" variant="secondary">Edit Profile</Button>
-                        </>
-                    ) : (
-                        <>
-                            <Button as={Link} href="/custom-order">Request Custom Design</Button>
-                            <Button as={Link} href="/catalog">Browse Catalog</Button>
-                            <Button as={Link} href="/messages" variant="secondary">Message Designers</Button>
-                            <Button as={Link} href="/profile" variant="secondary">Update Measurements</Button>
-                        </>
-                    )}
+            {/* Recent Activity & Orders */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Recent Orders */}
+                <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+                    <div className="p-6 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Orders</h2>
+                        <Link href="/dashboard/orders" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                            View All
+                        </Link>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm">
+                            <thead className="bg-gray-50 dark:bg-gray-800/50">
+                                <tr>
+                                    <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Order ID</th>
+                                    <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Customer</th>
+                                    <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Status</th>
+                                    <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                                {orders.length > 0 ? (
+                                    orders.slice(0, 5).map((order) => (
+                                        <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                            <td className="px-6 py-4 font-medium">#{order.id.slice(0, 8)}</td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <Avatar src={order.customer?.avatarUrl} alt={order.customer?.name} size="sm" />
+                                                    <span>{order.customer?.name || 'Guest'}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                                        order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                            'bg-gray-100 text-gray-800'
+                                                    }`}>
+                                                    {order.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">${order.amount}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="4" className="px-6 py-8 text-center text-gray-500">
+                                            No recent orders found.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </Card>
 
-            {/* Recent Orders/Commissions */}
-            <div className="space-y-4">
-                <h2 className="text-2xl font-serif">
-                    {isDesigner ? 'Recent Commissions' : 'Recent Orders'}
-                </h2>
-                {orders.length === 0 ? (
-                    <Card className="p-12 text-center">
-                        <p className="text-muted">
-                            {isDesigner ? 'No commissions yet' : 'No orders yet'}
-                        </p>
-                    </Card>
-                ) : (
-                    <div className="space-y-3">
-                        {orders.map((order) => (
-                            <Card key={order.id} className="p-6">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <h3 className="font-serif text-lg">{order.title || 'Custom Order'}</h3>
-                                        <p className="text-sm text-muted">
-                                            {new Date(order.createdAt).toLocaleDateString()}
-                                        </p>
-                                    </div>
-                                    <div className="flex items-center gap-4">
-                                        <Badge>{order.status}</Badge>
-                                        <p className="font-semibold">${order.amount || 0}</p>
-                                        <Button as={Link} href={`/orders/${order.id}`} size="sm">
-                                            View Details
-                                        </Button>
+                {/* Recent Activity / Notifications */}
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+                    <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Activity</h2>
+                    </div>
+                    <div className="p-6 space-y-6">
+                        {[1, 2, 3].map((_, i) => (
+                            <div key={i} className="flex gap-4">
+                                <div className="mt-1">
+                                    <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                        <Clock className="h-4 w-4" />
                                     </div>
                                 </div>
-                            </Card>
+                                <div>
+                                    <p className="text-sm text-gray-900 dark:text-white font-medium">
+                                        New order received
+                                    </p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                        2 hours ago
+                                    </p>
+                                </div>
+                            </div>
                         ))}
                     </div>
-                )}
+                </div>
             </div>
-        </Container>
-    )
+        </div>
+    );
 }

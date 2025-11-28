@@ -23,6 +23,10 @@ const liveStreamRoutes = require('./routes/liveStreams');
 const withdrawalRoutes = require('./routes/withdrawals');
 const notificationRoutes = require('./routes/notifications');
 const wishlistRoutes = require('./routes/wishlists');
+const portfolioRoutes = require('./routes/portfolios');
+const productVariantRoutes = require('./routes/productVariants');
+const exploreRoutes = require('./routes/explore');
+const customerRoutes = require('./routes/customers');
 
 const app = express();
 app.use(cors());
@@ -52,6 +56,10 @@ app.use('/api/live-streams', liveStreamRoutes);
 app.use('/api/withdrawals', withdrawalRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/wishlists', wishlistRoutes);
+app.use('/api/portfolios', portfolioRoutes);
+app.use('/api/product-variants', productVariantRoutes);
+app.use('/api/explore', exploreRoutes);
+app.use('/api/customers', customerRoutes);
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
