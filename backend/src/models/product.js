@@ -14,7 +14,10 @@ module.exports = (sequelize) => {
     isFeatured: { type: DataTypes.BOOLEAN, defaultValue: false },
     availability: { type: DataTypes.ENUM('in_stock', 'made_to_order', 'preorder'), defaultValue: 'made_to_order' },
     viewCount: { type: DataTypes.INTEGER, defaultValue: 0 },
-    averageRating: { type: DataTypes.FLOAT, defaultValue: 0 }
+    averageRating: { type: DataTypes.FLOAT, defaultValue: 0 },
+    hasVariants: { type: DataTypes.BOOLEAN, defaultValue: false },
+    likeCount: { type: DataTypes.INTEGER, defaultValue: 0 },
+    shareCount: { type: DataTypes.INTEGER, defaultValue: 0 }
   }, {
     tableName: 'products',
     timestamps: true

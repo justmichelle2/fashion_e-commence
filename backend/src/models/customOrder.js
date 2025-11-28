@@ -19,7 +19,9 @@ module.exports = (sequelize) => {
     paymentStatus: { type: DataTypes.ENUM('pending', 'deposit_paid', 'paid_in_full', 'refunded'), defaultValue: 'pending' },
     estimatedDeliveryDays: { type: DataTypes.INTEGER },
     shippingAddress: { type: DataTypes.JSON },
-    trackingUrl: { type: DataTypes.STRING }
+    trackingUrl: { type: DataTypes.STRING },
+    previewImages: { type: DataTypes.JSON, defaultValue: [] },
+    videoCallScheduled: { type: DataTypes.BOOLEAN, defaultValue: false }
   }, {
     tableName: 'custom_orders',
     timestamps: true

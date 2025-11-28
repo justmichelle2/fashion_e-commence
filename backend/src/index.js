@@ -1,7 +1,9 @@
 require('dotenv').config();
+const http = require('http');
+const { Server } = require('socket.io');
 const app = require('./app');
 const { sequelize } = require('./models');
-const os = require('os');
+const socketHandler = require('./utils/socketHandler');
 
 // Try the PORT env, otherwise start at 5000 and increment if in use
 const START_PORT = parseInt(process.env.PORT, 10) || 5000;
@@ -18,11 +20,30 @@ async function start() {
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
+        // Create HTTP server
+        const server = http.createServer(app);
+
+        // Setup Socket.io
+        const io = new Server(server, {
+          cors: {
+            origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+            credentials: true
+          }
+        });
+
+        // Initialize socket handlers
+        const socketHandlerInstance = socketHandler(io);
+
+        // Make io and socketHandler accessible in routes
+        app.set('io', io);
+        app.set('socketHandler', socketHandlerInstance);
+
         // Wrap listen in a promise so we can catch asynchronous 'error' events
         await new Promise((resolve, reject) => {
-          const server = app.listen(port, HOST, () => {
+          server.listen(port, HOST, () => {
             const addr = server.address();
             console.log(`Server running on port ${addr.port} (bound to ${addr.address})`);
+            console.log('Socket.io initialized');
             // register an error logger but do not reject here (listen succeeded)
             server.on('error', (err) => {
               console.error('Server error:', err);

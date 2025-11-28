@@ -27,7 +27,10 @@ module.exports = (sequelize) => {
     pronouns: { type: DataTypes.STRING },
     // KYC fields
     kycStatus: { type: DataTypes.ENUM('none', 'pending', 'approved', 'rejected'), defaultValue: 'none' },
-    idDocuments: { type: DataTypes.JSON, defaultValue: [] }
+    idDocuments: { type: DataTypes.JSON, defaultValue: [] },
+    // Online status
+    isOnline: { type: DataTypes.BOOLEAN, defaultValue: false },
+    lastSeenAt: { type: DataTypes.DATE }
   }, {
     tableName: 'users',
     timestamps: true,

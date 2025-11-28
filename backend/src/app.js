@@ -13,6 +13,16 @@ const templateRoutes = require('./routes/templates');
 const localeRoutes = require('./routes/locales');
 const currencyRoutes = require('./routes/currencies');
 const vipRoutes = require('./routes/vip');
+// New routes
+const postRoutes = require('./routes/posts');
+const followRoutes = require('./routes/follows');
+const messageRoutes = require('./routes/messages');
+const designerProfileRoutes = require('./routes/designerProfiles');
+const videoCallRoutes = require('./routes/videoCalls');
+const liveStreamRoutes = require('./routes/liveStreams');
+const withdrawalRoutes = require('./routes/withdrawals');
+const notificationRoutes = require('./routes/notifications');
+const wishlistRoutes = require('./routes/wishlists');
 
 const app = express();
 app.use(cors());
@@ -32,6 +42,16 @@ app.use('/api/templates', templateRoutes);
 app.use('/api/locales', localeRoutes);
 app.use('/api/currencies', currencyRoutes);
 app.use('/api/vip', vipRoutes);
+// New routes
+app.use('/api/posts', postRoutes);
+app.use('/api/follows', followRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/designer-profiles', designerProfileRoutes);
+app.use('/api/video-calls', videoCallRoutes);
+app.use('/api/live-streams', liveStreamRoutes);
+app.use('/api/withdrawals', withdrawalRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/wishlists', wishlistRoutes);
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
