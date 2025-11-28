@@ -218,6 +218,8 @@ async function linkCustomOrder(req, res){
     if(designerChange) changes.push({ field: 'designerId', ...designerChange });
     const totalChange = collectFieldChange(order, 'totalCents', customOrder.quoteCents || order.totalCents);
     if(totalChange) changes.push({ field: 'totalCents', ...totalChange });
+    const currencyChange = collectFieldChange(order, 'currency', customOrder.currency || order.currency);
+    if(currencyChange) changes.push({ field: 'currency', ...currencyChange });
     await saveOrderWithAudit(order, changes, req.user.id, 'Linked to custom commission');
     res.json({ order: formatOrderResponse(await order.reload({ include: ORDER_INCLUDE })) });
   }catch(err){

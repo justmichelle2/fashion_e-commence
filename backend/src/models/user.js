@@ -17,7 +17,10 @@ module.exports = (sequelize) => {
     preferredLocale: { type: DataTypes.STRING, defaultValue: 'en' },
     preferredSize: { type: DataTypes.STRING },
     measurementProfile: { type: DataTypes.JSON, defaultValue: {} },
-    notificationPrefs: { type: DataTypes.JSON, defaultValue: { email: true, sms: false, push: true } },
+    notificationPrefs: {
+      type: DataTypes.JSON,
+      defaultValue: { email: true, sms: false, push: true, vipExperiences: [] },
+    },
     onboardingComplete: { type: DataTypes.BOOLEAN, defaultValue: false },
     portfolioUrl: { type: DataTypes.STRING },
     styleNotes: { type: DataTypes.TEXT },

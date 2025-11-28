@@ -47,6 +47,7 @@ You can verify the auth stack without manually starting the server by running:
 ```powershell
 npm run smoke:register
 npm run smoke:profile           # requires the dev server or API to be running
+npm run smoke:vip               # boots an ephemeral API and runs the VIP workflow smoke
 ```
 
 `smoke:register` boots its own disposable server, while `smoke:profile` targets a running instance (default `http://localhost:5000/api`, override by passing the base URL as the first argument, e.g. `node scripts/profileUpdateTest.js http://localhost:3000/api`). The profile check creates a temporary user, exercises `PATCH /api/auth/me`, and cleans up afterward so you can validate the new profile workflow quickly.

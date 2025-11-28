@@ -1,4 +1,4 @@
-import CartExperience from '../../components/cart/CartExperience'
+import CartExperience from '../../../components/cart/CartExperience'
 
 export const metadata = {
   title: 'Cart & Checkout — Luxe Atelier',

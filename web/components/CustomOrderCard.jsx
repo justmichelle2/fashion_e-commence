@@ -4,6 +4,7 @@ import { Link } from '@/navigation'
 import CustomOrderTimeline from './CustomOrderTimeline'
 import { useLocale } from './LocaleProvider'
 import { normalizeStatusKey, humanizeStatus } from './orderStatus'
+import { useCurrency } from './CurrencyProvider'
 
 const STATUS_COLOR = {
   requested: 'bg-amber-200/30 text-amber-200',
@@ -15,17 +16,9 @@ const STATUS_COLOR = {
   rejected: 'bg-rose-200/30 text-rose-200',
 }
 
-const formatMoney = (value, currency = 'USD', locale = 'en-US') => {
-  if (typeof value !== 'number') return ''
-  return new Intl.NumberFormat(locale || 'en-US', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 0,
-  }).format(value / 100)
-}
-
 export default function CustomOrderCard({ order, role = 'customer' }) {
-  const { t, locale } = useLocale()
+  const { t } = useLocale()
+  const { format } = useCurrency()
   const statusClass = STATUS_COLOR[order.status] || 'bg-muted text-white'
   const statusKey = normalizeStatusKey(order.status)
   const statusLabel = statusKey
@@ -36,7 +29,7 @@ export default function CustomOrderCard({ order, role = 'customer' }) {
     ? t(`orders.status.${paymentKey}`, humanizeStatus(order.paymentStatus))
     : order.paymentStatus || t('orders.status.pending', 'Pending')
   const budgetValue = typeof order.quoteCents === 'number'
-    ? formatMoney(order.quoteCents, order.currency, locale)
+    ? format(order.quoteCents, { fromCurrency: order.currency || 'USD' })
     : t('orders.status.pending', 'Pending')
 
   return (

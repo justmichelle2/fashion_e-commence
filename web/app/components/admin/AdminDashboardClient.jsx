@@ -1,8 +1,7 @@
 "use client"
 
-import { Link } from '@/navigation'
+import { Link, useRouter } from '@/navigation'
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Container from '../ui/Container'
 import AutoGrid from '../ui/AutoGrid'
 import Card from '../ui/Card'
@@ -11,6 +10,7 @@ import Badge from '../ui/Badge'
 import { useSession } from '../../../components/SessionProvider'
 import { useAuthedSWR } from '../../../hooks/useAuthedSWR'
 import { formatMoney } from '../../lib/price'
+import { useLocale } from '@/components/LocaleProvider'
 
 const PANELS = [
   { title: 'Users', description: 'Approve designers, review KYC, and manage roles.', action: 'Review queue', href: '/admin/users' },
@@ -21,15 +21,16 @@ const PANELS = [
 export default function AdminDashboardClient() {
   const router = useRouter()
   const { status, user } = useSession()
+  const { locale } = useLocale()
   const isAdmin = status === 'authenticated' && user?.role === 'admin'
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace(`/login?redirect=${encodeURIComponent('/admin')}`)
+      router.replace(`/login?redirect=${encodeURIComponent(`/${locale}/admin`)}`)
     } else if (status === 'authenticated' && !isAdmin) {
       router.replace('/')
     }
-  }, [status, isAdmin, router])
+  }, [status, isAdmin, router, locale])
 
   const summary = useAuthedSWR('/api/dashboard/summary', { enabled: isAdmin })
   const customOrders = useAuthedSWR('/api/custom-orders', { enabled: isAdmin })

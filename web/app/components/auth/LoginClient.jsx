@@ -1,17 +1,23 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Link } from '@/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Link, useRouter } from '@/navigation'
 import Container from '../ui/Container'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
 import { useSession } from '../../../components/SessionProvider'
+import { normalizeRedirectTarget } from './redirectUtils'
+
+const FALLBACK_REDIRECT = '/profile'
 
 export default function LoginClient() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const redirect = searchParams.get('redirect') || '/profile'
+    const redirectParam = searchParams.get('redirect')
+    const redirectTarget = useMemo(() => {
+        return normalizeRedirectTarget(redirectParam, FALLBACK_REDIRECT)
+    }, [redirectParam])
     const { login, status } = useSession()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -35,9 +41,9 @@ export default function LoginClient() {
 
     useEffect(() => {
         if (loggedIn && status === 'authenticated') {
-            router.push(redirect)
+            router.push(redirectTarget)
         }
-    }, [loggedIn, status, router, redirect])
+    }, [loggedIn, status, router, redirectTarget])
 
     return (
         <Container className="w-1/2 mx-auto py-20">

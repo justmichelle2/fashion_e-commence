@@ -27,7 +27,42 @@
     "title": "Made-to-measure luxury, shipped globally",
     "subtitle": "Connect with ateliers across continents, commission one-of-a-kind looks, and track every fitting in a single place.",
     "primaryCta": "Explore catalog",
-    "secondaryCta": "Book a fitting"
+    "secondaryCta": "Book a fitting",
+    "carousel": {
+      "label": "Featured atelier",
+      "prev": "Previous hero highlight",
+      "next": "Next hero highlight",
+      "goto": "Go to slide",
+      "atelier": {
+        "title": "Seoul atelier",
+        "caption": "Bespoke tailoring finished in five fittings with remote approvals."
+      },
+      "fittings": {
+        "title": "Milan fittings",
+        "caption": "Hand embroidery livestreamed nightly with designer notes."
+      },
+      "artisan": {
+        "title": "Accra artisans",
+        "caption": "Sustainable beadwork sourced locally and catalogued per piece."
+      }
+    },
+    "stories": {
+      "atelier-network": {
+        "eyebrow": "Global network",
+        "title": "14 atelier cities, one dossier",
+        "body": "Preview capsule drops from Accra to Antwerp and pin looks to your concierge brief."
+      },
+      "virtual-fitting": {
+        "eyebrow": "Virtual fittings",
+        "title": "3D measurements without tape",
+        "body": "Body-map capture plus AI fit notes keep every tweak synced across ateliers."
+      },
+      "vip-concierge": {
+        "eyebrow": "Concierge",
+        "title": "Priority chat threads",
+        "body": "See sourcing updates, beadwork approvals, and fabric swaps in one encrypted log."
+      }
+    }
   },
   "Home": {
     "stats": {

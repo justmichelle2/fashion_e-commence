@@ -1,17 +1,23 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Link } from '@/navigation'
+import { useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Link, useRouter } from '@/navigation'
 import Container from '../ui/Container'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
 import { useSession } from '../../../components/SessionProvider'
+import { normalizeRedirectTarget } from './redirectUtils'
+
+const FALLBACK_REDIRECT = '/profile'
 
 export default function RegisterClient() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const redirect = searchParams.get('redirect') || '/profile'
+    const redirectParam = searchParams.get('redirect')
+    const redirectTarget = useMemo(() => {
+        return normalizeRedirectTarget(redirectParam, FALLBACK_REDIRECT)
+    }, [redirectParam])
     const { register: registerUser, status } = useSession()
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -26,7 +32,7 @@ export default function RegisterClient() {
         setSubmitting(true)
         try {
             await registerUser({ name, email, password, role })
-            router.push(redirect)
+            router.push(redirectTarget)
         } catch (err) {
             setError(err.message || 'Registration failed')
         } finally {

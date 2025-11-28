@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
 function toApiError(path, err){
   const reason = err?.message || 'Unknown error'
@@ -41,4 +41,9 @@ export async function getDesigner(id){
   return r?.designer ?? null
 }
 
-export default { listProducts, getProduct, listDesigners, getDesigner }
+export async function listVipExperiences(){
+  const r = await fetchJson('/api/vip/experiences')
+  return r?.experiences ?? []
+}
+
+export default { listProducts, getProduct, listDesigners, getDesigner, listVipExperiences }

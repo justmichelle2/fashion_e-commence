@@ -14,6 +14,7 @@ const Review = require('./review')(sequelize);
 const Order = require('./order')(sequelize);
 const OrderAuditLog = require('./orderAuditLog')(sequelize);
 const ChatMessage = require('./chatMessage')(sequelize);
+const VipRequest = require('./vipRequest')(sequelize);
 const DesignerTemplate = require('./designerTemplate')(sequelize);
 const DesignerPortfolio = require('./designerPortfolio')(sequelize);
 const Inspiration = require('./inspiration')(sequelize);
@@ -48,4 +49,7 @@ DesignerPortfolio.belongsTo(User, { as: 'designer', foreignKey: 'designerId' });
 User.hasMany(Inspiration, { as: 'inspirations', foreignKey: 'userId' });
 Inspiration.belongsTo(User, { as: 'owner', foreignKey: 'userId' });
 
-module.exports = { sequelize, User, Product, CustomOrder, Review, Order, ChatMessage, DesignerTemplate, OrderAuditLog, DesignerPortfolio, Inspiration };
+User.hasMany(VipRequest, { as: 'vipRequests', foreignKey: 'userId' });
+VipRequest.belongsTo(User, { as: 'requester', foreignKey: 'userId' });
+
+module.exports = { sequelize, User, Product, CustomOrder, Review, Order, ChatMessage, DesignerTemplate, OrderAuditLog, DesignerPortfolio, Inspiration, VipRequest };

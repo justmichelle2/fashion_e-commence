@@ -9,7 +9,7 @@ import AutoGrid from '../ui/AutoGrid'
 import Badge from '../ui/Badge'
 import { useSession } from '../../../components/SessionProvider'
 import { useAuthedSWR } from '../../../hooks/useAuthedSWR'
-import { formatMoney } from '../../lib/price'
+import { useCurrency } from '@/components/CurrencyProvider'
 
 const EMPTY_ORDER = {
   items: [],
@@ -20,8 +20,7 @@ const EMPTY_ORDER = {
   currency: 'USD',
 }
 
-function SummaryCard({ order, isProcessing }) {
-  const currency = order?.currency || 'USD'
+function SummaryCard({ order, isProcessing, formatAmount, activeCurrency, rateSourceLabel }) {
   const subtotal = order?.subtotalCents || 0
   const tax = order?.taxCents || 0
   const shipping = order?.shippingCents ?? 0
@@ -35,14 +34,14 @@ function SummaryCard({ order, isProcessing }) {
       </div>
 
       <dl className="space-y-2 text-sm text-muted">
-        <div className="flex justify-between"><dt>Subtotal</dt><dd>{formatMoney(subtotal, currency)}</dd></div>
-        <div className="flex justify-between"><dt>Tax</dt><dd>{formatMoney(tax, currency)}</dd></div>
-        <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? 'Complimentary' : formatMoney(shipping, currency)}</dd></div>
+        <div className="flex justify-between"><dt>Subtotal</dt><dd>{formatAmount(subtotal)}</dd></div>
+        <div className="flex justify-between"><dt>Tax</dt><dd>{formatAmount(tax)}</dd></div>
+        <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? 'Complimentary' : formatAmount(shipping)}</dd></div>
       </dl>
 
       <div className="flex items-center justify-between">
         <span className="text-xs uppercase tracking-[0.2em] text-muted">Total</span>
-        <span className="text-3xl font-serif">{formatMoney(total, currency)}</span>
+        <span className="text-3xl font-serif">{formatAmount(total)}</span>
       </div>
 
       <Button className="w-full justify-center" disabled={isProcessing || (order?.items?.length ?? 0) === 0}>
@@ -52,12 +51,16 @@ function SummaryCard({ order, isProcessing }) {
       <p className="text-xs text-muted text-center">
         You will confirm preferred atelier, measurements, and shipping address on the next step.
       </p>
+      <p className="text-[11px] text-muted text-center">
+        Showing in {activeCurrency} • {rateSourceLabel}
+      </p>
     </Card>
   )
 }
 
 export default function CartExperience() {
   const { status, token } = useSession()
+  const { format, currency: activeCurrency, rateSource } = useCurrency()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { data, isLoading, error, mutate } = useAuthedSWR('/api/orders/cart')
   const rawOrder = data?.order
@@ -72,6 +75,13 @@ export default function CartExperience() {
   }, [rawOrder])
 
   const items = order.items
+  const rateSourceLabel = rateSource?.asOf
+    ? `Rates ${rateSource.asOf} via ${rateSource.provider}`
+    : `Rates via ${rateSource?.provider || 'FX snapshot'}`
+  const formatOrderAmount = useCallback(
+    (amountCents = 0) => format(amountCents, { fromCurrency: order.currency || 'USD' }),
+    [format, order.currency],
+  )
 
   const handleRemove = useCallback(
     async (productId) => {
@@ -109,12 +119,12 @@ export default function CartExperience() {
             Saved looks, concierge chats, and checkout are available once you authenticate.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Button as={Link} href="/account/login" className="flex-1 justify-center">
+            <Button as={Link} href="/login" className="flex-1 justify-center">
               Sign in
             </Button>
             <Button
               as={Link}
-              href="/account/signup"
+              href="/register"
               variant="secondary"
               className="flex-1 justify-center"
             >
@@ -151,7 +161,7 @@ export default function CartExperience() {
               </div>
               <div className="flex flex-col items-end gap-3 text-right">
                 <span className="text-lg font-serif">
-                  {formatMoney((item.priceCents || 0) * (item.quantity || 1), order.currency)}
+                  {formatOrderAmount((item.priceCents || 0) * (item.quantity || 1))}
                 </span>
                 <Button variant="ghost" size="sm" onClick={() => handleRemove(item.productId)}>
                   Remove
@@ -168,7 +178,13 @@ export default function CartExperience() {
         </div>
 
         <div className="hidden lg:block">
-          <SummaryCard order={order} />
+          <SummaryCard
+            order={order}
+            isProcessing={isLoading}
+            formatAmount={formatOrderAmount}
+            activeCurrency={activeCurrency}
+            rateSourceLabel={rateSourceLabel}
+          />
         </div>
       </Container>
 
@@ -192,7 +208,7 @@ export default function CartExperience() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-muted">Total</p>
-              <p className="text-2xl font-serif">{formatMoney(order.totalCents || 0, order.currency)}</p>
+              <p className="text-2xl font-serif">{formatOrderAmount(order.totalCents || 0)}</p>
             </div>
             <Button className="w-40 justify-center" onClick={() => setDrawerOpen(true)}>
               Checkout
@@ -211,7 +227,13 @@ export default function CartExperience() {
                 Close
               </Button>
             </div>
-            <SummaryCard order={order} />
+            <SummaryCard
+              order={order}
+              isProcessing={isLoading}
+              formatAmount={formatOrderAmount}
+              activeCurrency={activeCurrency}
+              rateSourceLabel={rateSourceLabel}
+            />
           </div>
         </div>
       )}

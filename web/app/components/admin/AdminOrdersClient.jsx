@@ -1,15 +1,15 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from '@/navigation'
-import { useRouter } from 'next/navigation'
+import { Link, useRouter } from '@/navigation'
 import Container from '../ui/Container'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
 import FilterChip from '../ui/FilterChip'
 import { useSession } from '../../../components/SessionProvider'
 import { useAuthedSWR } from '../../../hooks/useAuthedSWR'
-import { formatMoney } from '../../lib/price'
+import { useLocale } from '@/components/LocaleProvider'
+import { useCurrency } from '@/components/CurrencyProvider'
 
 const PER_PAGE = 20
 const AUDIT_PAGE_SIZE = 10
@@ -104,6 +104,8 @@ function summarizeItems(items = []) {
 export default function AdminOrdersClient() {
   const router = useRouter()
   const { status, user, token } = useSession()
+  const { locale } = useLocale()
+  const { format } = useCurrency()
   const [filters, setFilters] = useState(() => ({ ...DEFAULT_FILTERS }))
   const [busyId, setBusyId] = useState(null)
   const [feedback, setFeedback] = useState(null)
@@ -114,11 +116,11 @@ export default function AdminOrdersClient() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace(`/account/login?redirect=${encodeURIComponent('/admin/orders')}`)
+      router.replace(`/login?redirect=${encodeURIComponent(`/${locale}/admin/orders`)}`)
     } else if (status === 'authenticated' && !isAdmin) {
       router.replace('/')
     }
-  }, [status, isAdmin, router])
+  }, [status, isAdmin, router, locale])
 
   const ordersQuery = useMemo(() => {
     const params = new URLSearchParams({ limit: PER_PAGE.toString(), page: filters.page.toString() })
@@ -294,7 +296,7 @@ export default function AdminOrdersClient() {
                     </div>
                     <div className="text-right space-y-2">
                       <span className="tag-chip inline-flex justify-end">{STATUS_LABELS[order.status] || order.status}</span>
-                      <p className="text-xl font-serif">{formatMoney(order.totalCents, order.currency)}</p>
+                      <p className="text-xl font-serif">{format(order.totalCents, { fromCurrency: order.currency || 'USD' })}</p>
                     </div>
                   </div>
 

@@ -3,13 +3,13 @@ import { cn } from '../../lib/cn'
 
 const VARIANTS = {
   primary:
-    'bg-black text-white hover:bg-black/90 border border-transparent dark:bg-gradient-to-r dark:from-[#c9a4ff] dark:to-[#8a5cf7] dark:text-black dark:hover:opacity-95 dark:shadow-[0_8px_22px_rgba(0,0,0,0.35)]',
+    'bg-purple-600 text-white hover:bg-purple-500 border border-transparent dark:bg-gradient-to-r dark:from-[#c9a4ff] dark:to-[#8a5cf7] dark:text-black dark:hover:opacity-95 dark:shadow-[0_8px_22px_rgba(0,0,0,0.35)]',
   secondary:
-    'border border-black/20 text-black hover:bg-black/5 dark:border-white/30 dark:text-white dark:hover:bg-white/5',
+    'border border-purple-300 text-purple-900 hover:bg-purple-50 dark:border-white/30 dark:text-white dark:hover:bg-white/5',
   ghost:
-    'text-black/70 hover:text-black hover:bg-black/5 dark:text-white/80 dark:hover:text-white dark:hover:bg-white/5',
+    'text-purple-700 hover:text-purple-600 hover:bg-purple-50 dark:text-white/80 dark:hover:text-white dark:hover:bg-white/5',
   muted:
-    'bg-black/10 text-black hover:bg-black/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20',
+    'bg-purple-50 text-purple-900 hover:bg-purple-100 dark:bg-white/10 dark:text-white dark:hover:bg-white/20',
 }
 
 const SIZES = {
@@ -38,7 +38,7 @@ export const Button = forwardRef(function Button(
       ref={ref}
       type={resolvedType}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-[0.18em] uppercase transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/40 dark:focus-visible:ring-white/60',
+        'inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-[0.18em] uppercase transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300 dark:focus-visible:ring-white/60',
         VARIANTS[variant] ?? VARIANTS.primary,
         SIZES[size] ?? SIZES.md,
         className,

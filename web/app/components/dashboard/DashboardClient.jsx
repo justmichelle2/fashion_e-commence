@@ -1,24 +1,25 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { Link } from '@/navigation'
+import { Link, useRouter } from '@/navigation'
 import Container from '../ui/Container'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
 import Badge from '../ui/Badge'
 import AutoGrid from '../ui/AutoGrid'
 import { useSession } from '../../../components/SessionProvider'
+import { useLocale } from '@/components/LocaleProvider'
 
 export default function DashboardClient({ orders = [], stats = {} }) {
     const router = useRouter()
     const { user, status } = useSession()
+    const { locale } = useLocale()
 
     useEffect(() => {
         if (status === 'unauthenticated') {
-            router.replace('/login?redirect=/dashboard')
+            router.replace(`/login?redirect=${encodeURIComponent(`/${locale}/dashboard`)}`)
         }
-    }, [status, router])
+    }, [status, router, locale])
 
     if (status === 'loading') {
         return (
@@ -35,7 +36,8 @@ export default function DashboardClient({ orders = [], stats = {} }) {
     return (
         <Container className="py-12 space-y-8">
             {/* Header */}
-            <div>
+            <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
                 <h1 className="text-4xl font-serif">
                     {isDesigner ? 'Designer Dashboard' : 'My Dashboard'}
                 </h1>
@@ -45,6 +47,10 @@ export default function DashboardClient({ orders = [], stats = {} }) {
                         : 'Track your orders and custom requests'
                     }
                 </p>
+                </div>
+                <Button as={Link} href="/profile" variant="secondary" size="sm">
+                    Edit profile
+                </Button>
             </div>
 
             {/* Stats */}

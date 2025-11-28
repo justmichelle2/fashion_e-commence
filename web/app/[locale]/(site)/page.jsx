@@ -9,7 +9,6 @@ import Container from '@/app/components/ui/Container'
 import AutoGrid from '@/app/components/ui/AutoGrid'
 import Card from '@/app/components/ui/Card'
 import Badge from '@/app/components/ui/Badge'
-import Button from '@/app/components/ui/Button'
 import { getProducts, getDesigners } from '../../lib/api'
 
 const STAT_KEYS = ['ateliers', 'fittings', 'leadTime', 'netZero']
@@ -72,11 +71,6 @@ export default async function HomePage() {
         <SectionHeading
           title={t('capsules.title')}
           description={t('capsules.description')}
-          action={
-            <Button as={Link} href="/catalog" variant="secondary">
-              {t('buttons.viewAll', 'View all')}
-            </Button>
-          }
         />
         <Container>
           <AutoGrid>
@@ -109,9 +103,6 @@ export default async function HomePage() {
                   <h4 className="text-lg font-serif">{item.title}</h4>
                   <p className="text-sm text-muted mt-2">{item.blurb}</p>
                 </div>
-                <Button variant="secondary" size="sm">
-                  {t('buttons.reserveLook', 'Reserve look')}
-                </Button>
               </Card>
             ))}
           </AutoGrid>
@@ -140,7 +131,6 @@ export default async function HomePage() {
                   <h4 className="mt-3 text-xl font-serif">{feature.title}</h4>
                   <p className="text-sm text-muted mt-2">{feature.summary}</p>
                 </div>
-                <Button variant="secondary">{t('buttons.book', 'Book')}</Button>
               </Card>
             ))}
           </div>

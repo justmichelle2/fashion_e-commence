@@ -1,29 +1,21 @@
+import { useMemo } from 'react'
 import Layout from '../../components/Layout'
 import SectionHeader from '../../components/SectionHeader'
 import { useAuthedSWR } from '../../hooks/useAuthedSWR'
 import { useRequireAuth } from '../../hooks/useRequireAuth'
+import { useLocale } from '../../components/LocaleProvider'
+import { useCurrency } from '../../components/CurrencyProvider'
 
-const FALLBACK_METRICS = [
-  { label: 'Active commissions', value: '3' },
-  { label: 'Portfolio pieces', value: '18' },
-  { label: 'Sales', value: '12' },
-]
+const FALLBACK_METRICS = ['activeCommissions', 'portfolioPieces', 'sales']
 
 const ACTIVE_STATUSES = ['requested', 'quoted', 'in_progress']
 const FITTING_STATUSES = ['quoted', 'in_progress', 'in_production']
 
 const PAYOUT_ELIGIBLE_STATUSES = ['paid', 'in_production', 'waiting_for_review', 'shipped', 'delivered']
 
-const formatMoney = (value, currency = 'USD') => {
-  if (typeof value !== 'number') return 'Pending'
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 0,
-  }).format(value / 100)
-}
-
 export default function DesignerDashboardPage() {
+  const { t } = useLocale()
+  const { format, convert, currency: activeCurrency } = useCurrency()
   const { status, isAuthorized } = useRequireAuth({ roles: ['designer'] })
   const { data: summaryData, isLoading: summaryLoading, error: summaryError } = useAuthedSWR('/api/dashboard/summary', {
     enabled: isAuthorized,
@@ -35,16 +27,94 @@ export default function DesignerDashboardPage() {
     enabled: isAuthorized,
   })
 
-  const metricCards = summaryData?.cards?.length ? summaryData.cards : FALLBACK_METRICS
+  const strings = useMemo(
+    () => ({
+      loading: t('pages.designerDashboard.loading', 'Loading designer workspace…'),
+      pageEyebrow: t('pages.designerDashboard.eyebrow', 'Designer'),
+      pageTitle: t('pages.designerDashboard.title', 'Dashboard'),
+      pageDescription: t(
+        'pages.designerDashboard.description',
+        'Track commissions, upload templates, and manage payouts. Real data wires into /api/dashboard.',
+      ),
+      metricFallbacks: {
+        activeCommissions: {
+          label: t('pages.designerDashboard.metrics.active', 'Active commissions'),
+          value: '3',
+        },
+        portfolioPieces: {
+          label: t('pages.designerDashboard.metrics.portfolio', 'Portfolio pieces'),
+          value: '18',
+        },
+        sales: {
+          label: t('pages.designerDashboard.metrics.sales', 'Sales'),
+          value: '12',
+        },
+      },
+      summaryHint: {
+        loading: t('pages.designerDashboard.summary.loading', 'Syncing live metrics…'),
+        error: t(
+          'pages.designerDashboard.summary.error',
+          'Unable to refresh summary — showing cached numbers.',
+        ),
+      },
+      pipelineHeader: {
+        title: t('pages.designerDashboard.pipeline.title', 'Active pipeline'),
+        subtitle: t('pages.designerDashboard.pipeline.subtitle', 'Concierge syncs status with clients'),
+        loading: t('pages.designerDashboard.pipeline.loading', 'Loading commissions…'),
+        empty: t(
+          'pages.designerDashboard.pipeline.empty',
+          "No active commissions yet. When concierge assigns briefs to you they'll appear here.",
+        ),
+        error: t('pages.designerDashboard.pipeline.error', 'Unable to refresh custom orders.'),
+      },
+      payouts: {
+        title: t('pages.designerDashboard.payouts.title', 'Payouts'),
+        subtitle: t('pages.designerDashboard.payouts.subtitle', 'Completed orders awaiting release'),
+        pending: t('pages.designerDashboard.payouts.pending', 'Pending'),
+        orders: t('pages.designerDashboard.payouts.orders', 'Orders'),
+        currency: t('pages.designerDashboard.payouts.currency', 'Currency'),
+        syncing: t('pages.designerDashboard.payouts.syncing', 'Syncing payout queue…'),
+        error: t('pages.designerDashboard.payouts.error', 'Unable to refresh payouts right now.'),
+      },
+      fittings: {
+        title: t('pages.designerDashboard.fittings.title', 'Upcoming fittings'),
+        subtitle: t('pages.designerDashboard.fittings.subtitle', 'Coordinate with concierge'),
+        empty: t('pages.designerDashboard.fittings.empty', 'No fittings scheduled yet.'),
+        statusLabel: t('pages.designerDashboard.fittings.status', 'Status'),
+        etaLabel: t('pages.designerDashboard.fittings.eta', 'ETA'),
+        etaFallback: t('pages.designerDashboard.fittings.etaFallback', 'TBD'),
+      },
+      templates: {
+        title: t('pages.designerDashboard.templates.title', 'Templates'),
+        subtitle: t('pages.designerDashboard.templates.subtitle', 'Speed up briefs with reusable looks'),
+        upload: t('pages.designerDashboard.templates.upload', 'Upload template'),
+        assets: t('pages.designerDashboard.templates.assets', 'Manage assets'),
+        share: t('pages.designerDashboard.templates.share', 'Share lookbook'),
+      },
+    }),
+    [t],
+  )
+
+  const metricCards = summaryData?.cards?.length
+    ? summaryData.cards
+    : FALLBACK_METRICS.map((key) => strings.metricFallbacks[key])
   const pipeline = (ordersData?.orders || []).filter((order) => ACTIVE_STATUSES.includes(order.status))
   const fittings = (ordersData?.orders || []).filter((order) => FITTING_STATUSES.includes(order.status)).slice(0, 4)
   const payoutOrders = (payoutsData?.orders || []).filter((order) => PAYOUT_ELIGIBLE_STATUSES.includes(order.status))
-  const payoutDue = payoutOrders.reduce((sum, order) => sum + (order.totalCents || 0), 0)
+  const payoutDue = payoutOrders.reduce(
+    (sum, order) =>
+      sum +
+      convert(order.totalCents || 0, {
+        from: order.currency || 'USD',
+        to: activeCurrency,
+      }),
+    0,
+  )
 
   if (status === 'loading' || status === 'idle') {
     return (
       <Layout>
-        <section className="py-24 text-center text-muted">Loading designer workspace…</section>
+        <section className="py-24 text-center text-muted">{strings.loading}</section>
       </Layout>
     )
   }
@@ -54,9 +124,9 @@ export default function DesignerDashboardPage() {
   return (
     <Layout>
       <section className="mb-8">
-        <p className="text-xs uppercase tracking-[0.25em] text-muted">Designer</p>
-        <h1 className="text-4xl font-serif">Dashboard</h1>
-        <p className="text-muted mt-2">Track commissions, upload templates, and manage payouts. Real data wires into `/api/dashboard`.</p>
+        <p className="text-xs uppercase tracking-[0.25em] text-muted">{strings.pageEyebrow}</p>
+        <h1 className="text-4xl font-serif">{strings.pageTitle}</h1>
+        <p className="text-muted mt-2">{strings.pageDescription}</p>
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
@@ -68,17 +138,15 @@ export default function DesignerDashboardPage() {
         ))}
       </div>
       {(summaryLoading || summaryError) && (
-        <p className="text-xs text-muted mb-8">
-          {summaryLoading ? 'Syncing live metrics…' : 'Unable to refresh summary — showing cached numbers.'}
-        </p>
+        <p className="text-xs text-muted mb-8">{summaryLoading ? strings.summaryHint.loading : strings.summaryHint.error}</p>
       )}
 
       <section className="mb-10">
-        <SectionHeader title="Active pipeline" subtitle="Concierge syncs status with clients" />
+        <SectionHeader title={strings.pipelineHeader.title} subtitle={strings.pipelineHeader.subtitle} />
         <div className="space-y-4">
-          {ordersLoading && <p className="text-muted">Loading commissions…</p>}
+          {ordersLoading && <p className="text-muted">{strings.pipelineHeader.loading}</p>}
           {!ordersLoading && pipeline.length === 0 && (
-            <article className="card p-6 text-sm text-muted">No active commissions yet. When concierge assigns briefs to you they&apos;ll appear here.</article>
+            <article className="card p-6 text-sm text-muted">{strings.pipelineHeader.empty}</article>
           )}
           {pipeline.map((order) => (
             <article key={order.id} className="card p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -89,50 +157,55 @@ export default function DesignerDashboardPage() {
               <span className="tag-chip">{order.status}</span>
             </article>
           ))}
-          {ordersError && <p className="text-xs text-rose-300">Unable to refresh custom orders.</p>}
+          {ordersError && <p className="text-xs text-rose-300">{strings.pipelineHeader.error}</p>}
         </div>
       </section>
 
       <section className="surface-glass p-6 rounded-2xl">
-        <SectionHeader title="Payouts" subtitle="Completed orders awaiting release" />
+        <SectionHeader title={strings.payouts.title} subtitle={strings.payouts.subtitle} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <article className="surface-glass/60 rounded-xl p-4">
-            <p className="text-xs uppercase tracking-[0.3em] text-muted">Pending</p>
-            <p className="text-2xl font-serif">{formatMoney(payoutDue)}</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-muted">{strings.payouts.pending}</p>
+            <p className="text-2xl font-serif">{format(payoutDue, { skipConversion: true })}</p>
           </article>
           <article className="surface-glass/60 rounded-xl p-4">
-            <p className="text-xs uppercase tracking-[0.3em] text-muted">Orders</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-muted">{strings.payouts.orders}</p>
             <p className="text-2xl font-serif">{payoutOrders.length}</p>
           </article>
           <article className="surface-glass/60 rounded-xl p-4">
-            <p className="text-xs uppercase tracking-[0.3em] text-muted">Currency</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-muted">{strings.payouts.currency}</p>
             <p className="text-2xl font-serif">{payoutOrders[0]?.currency || 'USD'}</p>
           </article>
         </div>
         {(payoutsLoading || payoutsError) && (
           <p className="text-xs text-muted mb-4">
-            {payoutsLoading ? 'Syncing payout queue…' : 'Unable to refresh payouts right now.'}
+            {payoutsLoading ? strings.payouts.syncing : strings.payouts.error}
           </p>
         )}
-        <SectionHeader title="Upcoming fittings" subtitle="Coordinate with concierge" />
+        <SectionHeader title={strings.fittings.title} subtitle={strings.fittings.subtitle} />
         <div className="space-y-3 mt-4">
-          {fittings.length === 0 && <p className="text-sm text-muted">No fittings scheduled yet.</p>}
+          {fittings.length === 0 && <p className="text-sm text-muted">{strings.fittings.empty}</p>}
           {fittings.map((order) => (
             <article key={order.id} className="card p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-muted">{order.customerName || order.customerId}</p>
                 <h3 className="text-lg font-serif">{order.title}</h3>
-                <p className="text-xs text-muted">Status: {order.status}</p>
+                <p className="text-xs text-muted">
+                  {strings.fittings.statusLabel}: {order.status}
+                </p>
               </div>
-              <span className="tag-chip">ETA {order.estimatedDeliveryDays ? `${order.estimatedDeliveryDays}d` : 'TBD'}</span>
+              <span className="tag-chip">
+                {strings.fittings.etaLabel}{' '}
+                {order.estimatedDeliveryDays ? `${order.estimatedDeliveryDays}d` : strings.fittings.etaFallback}
+              </span>
             </article>
           ))}
         </div>
-        <SectionHeader title="Templates" subtitle="Speed up briefs with reusable looks" />
+        <SectionHeader title={strings.templates.title} subtitle={strings.templates.subtitle} />
         <div className="flex flex-wrap gap-3 mt-4">
-          <button className="btn-secondary">Upload template</button>
-          <button className="btn-secondary">Manage assets</button>
-          <button className="btn-secondary">Share lookbook</button>
+          <button className="btn-secondary">{strings.templates.upload}</button>
+          <button className="btn-secondary">{strings.templates.assets}</button>
+          <button className="btn-secondary">{strings.templates.share}</button>
         </div>
       </section>
     </Layout>

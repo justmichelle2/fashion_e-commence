@@ -11,7 +11,7 @@ async function authMiddleware(req, res, next){
   try{
     const payload = jwt.verify(token, config.jwtSecret);
     const user = await User.findByPk(payload.id, {
-      attributes: ['id','role','email','name','verified','kycStatus'],
+      attributes: ['id','role','email','name','verified','kycStatus','preferredCurrency','preferredLocale'],
     });
     if(!user) return res.status(401).json({ error: 'Unauthorized' });
     req.user = {
@@ -21,6 +21,8 @@ async function authMiddleware(req, res, next){
       name: user.name,
       verified: user.verified,
       kycStatus: user.kycStatus,
+      preferredCurrency: user.preferredCurrency,
+      preferredLocale: user.preferredLocale,
     };
     next();
   }catch(err){

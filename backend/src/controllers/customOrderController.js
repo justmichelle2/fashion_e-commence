@@ -1,5 +1,6 @@
 const { CustomOrder } = require('../models');
 const { validate, schemas } = require('../utils/validators');
+const { normalizeCurrency, BASE_CURRENCY } = require('../utils/currency');
 
 async function createRequest(req, res){
   if(req.user.role !== 'customer') return res.status(403).json({ error: 'Only customers can create requests' });
@@ -7,11 +8,13 @@ async function createRequest(req, res){
     const parsed = validate(schemas.customOrderCreate, req.body);
     if(parsed.error) return res.status(400).json({ error: parsed.error });
     const payload = parsed.data;
+    const preferredCurrency = normalizeCurrency(req.user.preferredCurrency) || BASE_CURRENCY;
     const order = await CustomOrder.create({
       ...payload,
       inspirationImages: payload.inspirationImages || [],
       description: payload.description || payload.notes || '',
       customerId: req.user.id,
+      currency: preferredCurrency,
     });
     res.json({ order });
   }catch(err){

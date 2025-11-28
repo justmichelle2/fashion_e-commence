@@ -1,18 +1,20 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/navigation'
 import Container from '../ui/Container'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
 import { useSession } from '../../../components/SessionProvider'
 import { useAuthedSWR } from '../../../hooks/useAuthedSWR'
+import { useLocale } from '@/components/LocaleProvider'
 
 const ROLE_OPTIONS = ['customer', 'designer', 'admin']
 
 export default function AdminUsersClient() {
   const router = useRouter()
   const { status, user, token } = useSession()
+  const { locale } = useLocale()
   const isAdmin = status === 'authenticated' && user?.role === 'admin'
   const { data, isLoading, error, mutate } = useAuthedSWR(isAdmin ? '/api/admin/users' : null, { enabled: isAdmin })
   const [busyId, setBusyId] = useState(null)
@@ -21,11 +23,11 @@ export default function AdminUsersClient() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace(`/account/login?redirect=${encodeURIComponent('/admin/users')}`)
+      router.replace(`/login?redirect=${encodeURIComponent(`/${locale}/admin/users`)}`)
     } else if (status === 'authenticated' && !isAdmin) {
       router.replace('/')
     }
-  }, [status, isAdmin, router])
+  }, [status, isAdmin, router, locale])
 
   const callAdminAction = async (path, body = {}) => {
     if (!token) return

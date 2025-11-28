@@ -1,4 +1,5 @@
 const { z } = require('zod')
+const { SUPPORTED_CURRENCY_CODES, BASE_CURRENCY } = require('./currency')
 
 const idSchema = z.union([
   z.string().uuid('Invalid ID format'),
@@ -27,7 +28,7 @@ const productCreateSchema = z.object({
   title: z.string().min(3).max(160),
   description: z.string().max(4000).optional().default(''),
   priceCents: z.coerce.number().int().min(1000),
-  currency: z.string().min(2).max(6).optional().default('USD'),
+  currency: z.enum(SUPPORTED_CURRENCY_CODES).optional().default(BASE_CURRENCY),
   category: z.string().max(120).optional(),
   tags: stringArray.optional().default([]),
   availability: z.enum(['in_stock', 'made_to_order', 'preorder']).optional(),

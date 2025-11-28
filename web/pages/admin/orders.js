@@ -4,6 +4,8 @@ import Layout from '../../components/Layout'
 import { useAuthedSWR } from '../../hooks/useAuthedSWR'
 import { useRequireAuth } from '../../hooks/useRequireAuth'
 import { useSession } from '../../components/SessionProvider'
+import { useLocale } from '../../components/LocaleProvider'
+import { useCurrency } from '../../components/CurrencyProvider'
 
 const PER_PAGE = 20
 const AUDIT_PAGE_SIZE = 10
@@ -37,49 +39,40 @@ const STATUS_LABELS = {
 
 const ACTIONS_BY_STATUS = {
   pending_payment: [
-    { label: 'Mark paid', nextStatus: 'paid' },
-    { label: 'Cancel order', nextStatus: 'cancelled' },
-    { label: 'Open dispute', nextStatus: 'dispute_opened' },
+    { key: 'markPaid', label: 'Mark paid', nextStatus: 'paid' },
+    { key: 'cancelOrder', label: 'Cancel order', nextStatus: 'cancelled' },
+    { key: 'openDispute', label: 'Open dispute', nextStatus: 'dispute_opened' },
   ],
   paid: [
-    { label: 'Start production', nextStatus: 'in_production' },
-    { label: 'Issue refund', nextStatus: 'refunded' },
-    { label: 'Open dispute', nextStatus: 'dispute_opened' },
+    { key: 'startProduction', label: 'Start production', nextStatus: 'in_production' },
+    { key: 'issueRefund', label: 'Issue refund', nextStatus: 'refunded' },
+    { key: 'openDispute', label: 'Open dispute', nextStatus: 'dispute_opened' },
   ],
   in_production: [
-    { label: 'Awaiting review', nextStatus: 'waiting_for_review' },
-    { label: 'Cancel order', nextStatus: 'cancelled' },
-    { label: 'Open dispute', nextStatus: 'dispute_opened' },
+    { key: 'awaitingReview', label: 'Awaiting review', nextStatus: 'waiting_for_review' },
+    { key: 'cancelOrder', label: 'Cancel order', nextStatus: 'cancelled' },
+    { key: 'openDispute', label: 'Open dispute', nextStatus: 'dispute_opened' },
   ],
   waiting_for_review: [
-    { label: 'Mark shipped', nextStatus: 'shipped' },
-    { label: 'Issue refund', nextStatus: 'refunded' },
-    { label: 'Open dispute', nextStatus: 'dispute_opened' },
+    { key: 'markShipped', label: 'Mark shipped', nextStatus: 'shipped' },
+    { key: 'issueRefund', label: 'Issue refund', nextStatus: 'refunded' },
+    { key: 'openDispute', label: 'Open dispute', nextStatus: 'dispute_opened' },
   ],
   shipped: [
-    { label: 'Mark delivered', nextStatus: 'delivered' },
-    { label: 'Issue refund', nextStatus: 'refunded' },
-    { label: 'Open dispute', nextStatus: 'dispute_opened' },
+    { key: 'markDelivered', label: 'Mark delivered', nextStatus: 'delivered' },
+    { key: 'issueRefund', label: 'Issue refund', nextStatus: 'refunded' },
+    { key: 'openDispute', label: 'Open dispute', nextStatus: 'dispute_opened' },
   ],
   delivered: [
-    { label: 'Issue refund', nextStatus: 'refunded' },
-    { label: 'Open dispute', nextStatus: 'dispute_opened' },
+    { key: 'issueRefund', label: 'Issue refund', nextStatus: 'refunded' },
+    { key: 'openDispute', label: 'Open dispute', nextStatus: 'dispute_opened' },
   ],
   dispute_opened: [
-    { label: 'Resume production', nextStatus: 'in_production' },
-    { label: 'Issue refund', nextStatus: 'refunded' },
+    { key: 'resumeProduction', label: 'Resume production', nextStatus: 'in_production' },
+    { key: 'issueRefund', label: 'Issue refund', nextStatus: 'refunded' },
   ],
-  cancelled: [{ label: 'Reopen order', nextStatus: 'pending_payment' }],
+  cancelled: [{ key: 'reopenOrder', label: 'Reopen order', nextStatus: 'pending_payment' }],
   refunded: [],
-}
-
-const formatMoney = (value, currency = 'USD') => {
-  if (typeof value !== 'number') return '—'
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 0,
-  }).format(value / 100)
 }
 
 const formatDate = (value) => {
@@ -96,10 +89,10 @@ const formatDate = (value) => {
   }
 }
 
-const summarizeItems = (items = []) => {
-  if (!items.length) return 'No line items attached.'
+const summarizeItems = (items = [], { empty = 'No line items attached.', fallbackTitle = 'Item' } = {}) => {
+  if (!items.length) return empty
   return items
-    .map((item) => `${item.title || 'Item'} ×${item.quantity || 1}`)
+    .map((item) => `${item.title || fallbackTitle} ×${item.quantity || 1}`)
     .slice(0, 3)
     .join(', ')
 }
@@ -131,6 +124,8 @@ const formatAuditValue = (value) => {
 }
 
 export default function AdminOrdersPage() {
+  const { t } = useLocale()
+  const { format } = useCurrency()
   const { status, isAuthorized } = useRequireAuth({ roles: ['admin'] })
   const { token } = useSession()
   const [filters, setFilters] = useState(() => ({ ...DEFAULT_FILTERS }))
@@ -138,6 +133,117 @@ export default function AdminOrdersPage() {
   const [feedback, setFeedback] = useState(null)
   const [expandedOrderId, setExpandedOrderId] = useState(null)
   const [auditPage, setAuditPage] = useState(1)
+
+  const strings = useMemo(
+    () => ({
+      loading: t('pages.adminOrders.loadingWorkspace', 'Loading admin workspace…'),
+      page: {
+        eyebrow: t('pages.adminOrders.page.eyebrow', 'Admin'),
+        title: t('pages.adminOrders.page.title', 'Order escalations'),
+        description: t(
+          'pages.adminOrders.page.description',
+          'Track payment issues, cancellations, and fulfillment steps from one control room.',
+        ),
+      },
+      feedback: {
+        success: t('pages.adminOrders.feedback.success', 'Order updated'),
+      },
+      metrics: {
+        escalations: t('pages.adminOrders.metrics.escalations', 'Escalations'),
+        pending: t('pages.adminOrders.metrics.pending', 'Pending'),
+        inProduction: t('pages.adminOrders.metrics.inProduction', 'In production'),
+      },
+      filters: {
+        status: t('pages.adminOrders.filters.status', 'Status'),
+        customer: t('pages.adminOrders.filters.customer', 'Customer'),
+        designer: t('pages.adminOrders.filters.designer', 'Designer'),
+        customerPlaceholder: t('pages.adminOrders.filters.customerPlaceholder', 'Search name'),
+        designerPlaceholder: t('pages.adminOrders.filters.designerPlaceholder', 'Search name'),
+        from: t('pages.adminOrders.filters.from', 'From'),
+        to: t('pages.adminOrders.filters.to', 'To'),
+        reset: t('pages.adminOrders.filters.reset', 'Reset filters'),
+      },
+      table: {
+        syncing: t('pages.adminOrders.table.syncing', 'Syncing orders…'),
+        empty: t('pages.adminOrders.table.empty', 'No orders match this filter.'),
+      },
+      types: {
+        custom: t('pages.adminOrders.types.custom', 'Custom commission'),
+        catalog: t('pages.adminOrders.types.catalog', 'Catalog order'),
+      },
+      updatedPrefix: t('pages.adminOrders.updatedPrefix', 'Updated'),
+      people: {
+        customer: t('pages.adminOrders.people.customer', 'Customer'),
+        designer: t('pages.adminOrders.people.designer', 'Designer'),
+        unassigned: t('pages.adminOrders.people.unassigned', 'Unassigned'),
+      },
+      lineItems: {
+        label: t('pages.adminOrders.lineItems.label', 'Line items'),
+        empty: t('pages.adminOrders.lineItems.empty', 'No line items attached.'),
+        fallback: t('pages.adminOrders.lineItems.fallback', 'Item'),
+      },
+      linkedBrief: {
+        label: t('pages.adminOrders.linkedBrief.label', 'Linked brief:'),
+        cta: t('pages.adminOrders.linkedBrief.cta', 'View conversation'),
+      },
+      notes: t('pages.adminOrders.notes', 'Notes'),
+      actions: {
+        label: t('pages.adminOrders.actions.label', 'Actions'),
+        none: t('pages.adminOrders.actions.none', 'No actions available.'),
+        updating: t('pages.adminOrders.actions.updating', 'Updating…'),
+        setStatus: t('pages.adminOrders.actions.setStatus', 'Set status'),
+        showDetails: t('pages.adminOrders.actions.showDetails', 'Details & audit trail'),
+        hideDetails: t('pages.adminOrders.actions.hideDetails', 'Hide details'),
+      },
+      details: {
+        shipping: t('pages.adminOrders.details.shipping', 'Shipping'),
+        paymentMethod: t('pages.adminOrders.details.paymentMethod', 'Payment method'),
+        notSet: t('pages.adminOrders.details.notSet', 'Not set'),
+      },
+      audit: {
+        title: t('pages.adminOrders.audit.title', 'Audit history'),
+        prev: t('pages.adminOrders.audit.prev', 'Prev'),
+        next: t('pages.adminOrders.audit.next', 'Next'),
+        loading: t('pages.adminOrders.audit.loading', 'Loading audit trail…'),
+        error: t('pages.adminOrders.audit.error', 'Unable to load audit logs.'),
+        empty: t('pages.adminOrders.audit.empty', 'No audit entries yet.'),
+        fieldBy: t('pages.adminOrders.audit.by', 'By'),
+        comment: t('pages.adminOrders.audit.comment', 'Comment'),
+      },
+      errors: {
+        orders: t('pages.adminOrders.errors.orders', 'Unable to load orders.'),
+      },
+      pagination: {
+        previous: t('pages.adminOrders.pagination.previous', 'Previous'),
+        next: t('pages.adminOrders.pagination.next', 'Next'),
+      },
+    }),
+    [t],
+  )
+
+  const statusLabels = useMemo(() => {
+    const map = {}
+    Object.entries(STATUS_LABELS).forEach(([key, label]) => {
+      map[key] = t(`pages.adminOrders.status.${key}`, label)
+    })
+    return map
+  }, [t])
+
+  const statusOptions = useMemo(
+    () => STATUS_OPTIONS.map((option) => ({ ...option, label: t(`pages.adminOrders.filters.status.${option.value}`, option.label) })),
+    [t],
+  )
+
+  const actionsByStatus = useMemo(() => {
+    const map = {}
+    Object.entries(ACTIONS_BY_STATUS).forEach(([status, actions]) => {
+      map[status] = actions.map((action) => ({
+        ...action,
+        label: t(`pages.adminOrders.actions.${action.key}`, action.label),
+      }))
+    })
+    return map
+  }, [t])
 
   const ordersQuery = useMemo(() => {
     const params = new URLSearchParams({ limit: PER_PAGE.toString(), page: filters.page.toString() })
@@ -200,7 +306,7 @@ export default function AdminOrdersPage() {
       }
       await mutate()
       if (orderId === expandedOrderId && auditMutate) await auditMutate()
-      setFeedback({ type: 'success', text: 'Order updated' })
+      setFeedback({ type: 'success', text: strings.feedback.success })
     } catch (err) {
       setFeedback({ type: 'error', text: err.message })
     } finally {
@@ -230,7 +336,7 @@ export default function AdminOrdersPage() {
   if (status === 'loading' || status === 'idle') {
     return (
       <Layout>
-        <section className="py-24 text-center text-muted">Loading admin workspace…</section>
+        <section className="py-24 text-center text-muted">{strings.loading}</section>
       </Layout>
     )
   }
@@ -240,9 +346,9 @@ export default function AdminOrdersPage() {
   return (
     <Layout>
       <section className="mb-8">
-        <p className="text-xs uppercase tracking-[0.25em] text-muted">Admin</p>
-        <h1 className="text-4xl font-serif">Order escalations</h1>
-        <p className="text-muted mt-2">Track payment issues, cancellations, and fulfillment steps from one control room.</p>
+        <p className="text-xs uppercase tracking-[0.25em] text-muted">{strings.page.eyebrow}</p>
+        <h1 className="text-4xl font-serif">{strings.page.title}</h1>
+        <p className="text-muted mt-2">{strings.page.description}</p>
       </section>
 
       {feedback && (
@@ -251,9 +357,9 @@ export default function AdminOrdersPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {[
-          { label: 'Escalations', value: summary?.escalations ?? 0 },
-          { label: 'Pending', value: summary?.pending ?? 0 },
-          { label: 'In production', value: summary?.inProduction ?? 0 },
+          { label: strings.metrics.escalations, value: summary?.escalations ?? 0 },
+          { label: strings.metrics.pending, value: summary?.pending ?? 0 },
+          { label: strings.metrics.inProduction, value: summary?.inProduction ?? 0 },
         ].map((metric) => (
           <article key={metric.label} className="surface-glass rounded-2xl p-5 text-center">
             <p className="text-3xl font-serif">{metric.value}</p>
@@ -265,13 +371,13 @@ export default function AdminOrdersPage() {
       <section className="surface-glass rounded-2xl p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           <label className="text-xs uppercase tracking-[0.2em] text-muted flex flex-col gap-2">
-            Status
+            {strings.filters.status}
             <select
               className="form-select"
               value={filters.status}
               onChange={(event) => handleFilterChange('status', event.target.value)}
             >
-              {STATUS_OPTIONS.map((option) => (
+              {statusOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -279,26 +385,26 @@ export default function AdminOrdersPage() {
             </select>
           </label>
           <label className="text-xs uppercase tracking-[0.2em] text-muted flex flex-col gap-2">
-            Customer
+            {strings.filters.customer}
             <input
               className="form-input"
-              placeholder="Search name"
+              placeholder={strings.filters.customerPlaceholder}
               value={filters.customer}
               onChange={(event) => handleFilterChange('customer', event.target.value)}
             />
           </label>
           <label className="text-xs uppercase tracking-[0.2em] text-muted flex flex-col gap-2">
-            Designer
+            {strings.filters.designer}
             <input
               className="form-input"
-              placeholder="Search name"
+              placeholder={strings.filters.designerPlaceholder}
               value={filters.designer}
               onChange={(event) => handleFilterChange('designer', event.target.value)}
             />
           </label>
           <div className="grid grid-cols-2 gap-2">
             <label className="text-xs uppercase tracking-[0.2em] text-muted flex flex-col gap-2">
-              From
+              {strings.filters.from}
               <input
                 type="date"
                 className="form-input"
@@ -307,7 +413,7 @@ export default function AdminOrdersPage() {
               />
             </label>
             <label className="text-xs uppercase tracking-[0.2em] text-muted flex flex-col gap-2">
-              To
+              {strings.filters.to}
               <input
                 type="date"
                 className="form-input"
@@ -319,61 +425,75 @@ export default function AdminOrdersPage() {
         </div>
         <div className="flex justify-end mt-4">
           <button className="btn-secondary" onClick={resetFilters}>
-            Reset filters
+            {strings.filters.reset}
           </button>
         </div>
       </section>
 
       <section className="surface-glass rounded-2xl p-6">
-        {isLoading && <p className="text-sm text-muted">Syncing orders…</p>}
-        {!isLoading && orders.length === 0 && <p className="text-sm text-muted">No orders match this filter.</p>}
+        {isLoading && <p className="text-sm text-muted">{strings.table.syncing}</p>}
+        {!isLoading && orders.length === 0 && <p className="text-sm text-muted">{strings.table.empty}</p>}
         <div className="divide-y divide-white/5">
           {orders.map((order) => {
-            const actions = ACTIONS_BY_STATUS[order.status] || []
+            const actions = actionsByStatus[order.status] || []
             const expanded = expandedOrderId === order.id
+            const orderTotal = format(order.totalCents || 0, { fromCurrency: order.currency || 'USD' })
             return (
               <article key={order.id} className="py-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.3em] text-muted">#{order.id?.slice(0, 8)}</p>
                     <h2 className="text-2xl font-serif">
-                      {order.type === 'custom' ? 'Custom commission' : 'Catalog order'}
+                      {order.type === 'custom' ? strings.types.custom : strings.types.catalog}
                     </h2>
-                    <p className="text-xs text-muted">Updated {formatDate(order.updatedAt)}</p>
+                    <p className="text-xs text-muted">
+                      {strings.updatedPrefix} {formatDate(order.updatedAt)}
+                    </p>
                   </div>
                   <div className="text-right space-y-2">
-                    <span className="tag-chip inline-flex justify-end">{STATUS_LABELS[order.status] || order.status}</span>
-                    <p className="text-xl font-serif">{formatMoney(order.totalCents, order.currency)}</p>
+                    <span className="tag-chip inline-flex justify-end">{statusLabels[order.status] || order.status}</span>
+                    <p className="text-xl font-serif">{orderTotal}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-sm">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted">Customer</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted">{strings.people.customer}</p>
                     <p className="font-medium">{order.customerName || order.customer?.name || order.customerId || '—'}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted">Designer</p>
-                    <p className="font-medium">{order.designerName || order.designer?.name || order.designerId || 'Unassigned'}</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted">{strings.people.designer}</p>
+                    <p className="font-medium">{order.designerName || order.designer?.name || order.designerId || strings.people.unassigned}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted">Line items</p>
-                    <p>{summarizeItems(order.items)}</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted">{strings.lineItems.label}</p>
+                    <p>
+                      {summarizeItems(order.items, {
+                        empty: strings.lineItems.empty,
+                        fallbackTitle: strings.lineItems.fallback,
+                      })}
+                    </p>
                   </div>
                 </div>
 
                 {order.customOrderId && (
                   <p className="text-xs text-muted mt-3">
-                    Linked brief:{' '}
-                    <Link href={`/custom-order/${order.customOrder?.id || order.customOrderId}`}>View conversation →</Link>
+                    {strings.linkedBrief.label}{' '}
+                    <Link href={`/custom-order/${order.customOrder?.id || order.customOrderId}`}>
+                      {strings.linkedBrief.cta} →
+                    </Link>
                   </p>
                 )}
 
-                {order.notes && <p className="text-xs text-muted mt-3">Notes: {order.notes}</p>}
+                {order.notes && (
+                  <p className="text-xs text-muted mt-3">
+                    {strings.notes}: {order.notes}
+                  </p>
+                )}
 
                 <div className="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-white/5">
-                  <div className="text-xs uppercase tracking-[0.2em] text-muted">Actions</div>
-                  {actions.length === 0 && <p className="text-xs text-muted">No actions available.</p>}
+                  <div className="text-xs uppercase tracking-[0.2em] text-muted">{strings.actions.label}</div>
+                  {actions.length === 0 && <p className="text-xs text-muted">{strings.actions.none}</p>}
                   {actions.map((action) => (
                     <button
                       key={action.label}
@@ -381,18 +501,20 @@ export default function AdminOrdersPage() {
                       disabled={busyId === order.id}
                       onClick={() => handleStatusChange(order.id, action.nextStatus)}
                     >
-                      {busyId === order.id ? 'Updating…' : action.label}
+                      {busyId === order.id ? strings.actions.updating : action.label}
                     </button>
                   ))}
                   <label className="text-xs uppercase tracking-[0.2em] text-muted flex items-center gap-2">
-                    Set status
+                    {strings.actions.setStatus}
                     <select
                       className="form-select"
                       value={order.status}
                       onChange={handleStatusSelect(order.id, order.status)}
                       disabled={busyId === order.id}
                     >
-                      {STATUS_OPTIONS.filter((option) => option.value !== 'all').map((option) => (
+                      {statusOptions
+                        .filter((option) => option.value !== 'all')
+                        .map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
@@ -403,7 +525,7 @@ export default function AdminOrdersPage() {
                     className="btn-secondary"
                     onClick={() => setExpandedOrderId(expanded ? null : order.id)}
                   >
-                    {expanded ? 'Hide details' : 'Details & audit trail'}
+                    {expanded ? strings.actions.hideDetails : strings.actions.showDetails}
                   </button>
                 </div>
 
@@ -411,17 +533,17 @@ export default function AdminOrdersPage() {
                   <div className="mt-4 pt-4 border-t border-white/5 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-muted">Shipping</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted">{strings.details.shipping}</p>
                         <p>{formatAddress(order.shippingAddress)}</p>
                       </div>
                       <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-muted">Payment method</p>
-                        <p>{order.paymentMethod || 'Not set'}</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted">{strings.details.paymentMethod}</p>
+                        <p>{order.paymentMethod || strings.details.notSet}</p>
                       </div>
                     </div>
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs uppercase tracking-[0.2em] text-muted">Audit history</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted">{strings.audit.title}</p>
                         {auditPagination && (
                           <div className="flex items-center gap-2 text-xs">
                             <button
@@ -429,25 +551,28 @@ export default function AdminOrdersPage() {
                               disabled={auditPage === 1}
                               onClick={() => setAuditPage((value) => Math.max(1, value - 1))}
                             >
-                              Prev
+                              {strings.audit.prev}
                             </button>
                             <span>
-                              Page {auditPagination.page} / {auditPagination.pages || 1}
+                              {t('pages.adminOrders.audit.pageSummary', 'Page {page} / {pages}', {
+                                page: auditPagination.page,
+                                pages: auditPagination.pages || 1,
+                              })}
                             </span>
                             <button
                               className="btn-secondary"
                               disabled={auditPagination.page >= auditPagination.pages}
                               onClick={() => setAuditPage((value) => value + 1)}
                             >
-                              Next
+                              {strings.audit.next}
                             </button>
                           </div>
                         )}
                       </div>
-                      {auditLoading && <p className="text-xs text-muted">Loading audit trail…</p>}
-                      {auditError && <p className="text-xs text-rose-300">Unable to load audit logs.</p>}
+                      {auditLoading && <p className="text-xs text-muted">{strings.audit.loading}</p>}
+                      {auditError && <p className="text-xs text-rose-300">{strings.audit.error}</p>}
                       {!auditLoading && auditLogs.length === 0 && (
-                        <p className="text-xs text-muted">No audit entries yet.</p>
+                        <p className="text-xs text-muted">{strings.audit.empty}</p>
                       )}
                       {!auditLoading && auditLogs.length > 0 && (
                         <ul className="space-y-2 text-xs">
@@ -461,8 +586,16 @@ export default function AdminOrdersPage() {
                                 <span className="text-muted">{formatAuditValue(log.previousValue)} →</span>{' '}
                                 <span className="font-semibold">{formatAuditValue(log.newValue)}</span>
                               </p>
-                              {log.actor && <p className="text-muted mt-1">By {log.actor.name || log.actor.email}</p>}
-                              {log.comment && <p className="mt-1">Comment: {log.comment}</p>}
+                              {log.actor && (
+                                <p className="text-muted mt-1">
+                                  {strings.audit.fieldBy} {log.actor.name || log.actor.email}
+                                </p>
+                              )}
+                              {log.comment && (
+                                <p className="mt-1">
+                                  {strings.audit.comment}: {log.comment}
+                                </p>
+                              )}
                             </li>
                           ))}
                         </ul>
@@ -474,21 +607,24 @@ export default function AdminOrdersPage() {
             )
           })}
         </div>
-        {error && <p className="text-xs text-rose-300 mt-4">Unable to load orders.</p>}
+        {error && <p className="text-xs text-rose-300 mt-4">{strings.errors.orders}</p>}
         {pagination && pagination.pages > 1 && (
           <div className="flex items-center justify-between mt-6 text-sm">
             <button className="btn-secondary" disabled={filters.page === 1} onClick={() => goToPage(-1)}>
-              Previous
+              {strings.pagination.previous}
             </button>
             <span>
-              Page {pagination.page} of {pagination.pages || 1}
+              {t('pages.adminOrders.pagination.summary', 'Page {page} of {pages}', {
+                page: pagination.page,
+                pages: pagination.pages || 1,
+              })}
             </span>
             <button
               className="btn-secondary"
               disabled={pagination.page >= pagination.pages}
               onClick={() => goToPage(1)}
             >
-              Next
+              {strings.pagination.next}
             </button>
           </div>
         )}

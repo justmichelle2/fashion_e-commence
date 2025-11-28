@@ -8,7 +8,8 @@
     "start": "next start",
     "backend:dev": "npm run dev --prefix backend",
     "backend:seed": "npm run seed --prefix backend",
-    "backend:create-db": "npm run create-db --prefix backend"
+    "backend:create-db": "npm run create-db --prefix backend",
+    "backend:smoke:vip": "npm run smoke:vip --prefix backend"
   },
   "dependencies": {
     "autoprefixer": "^10.4.17",

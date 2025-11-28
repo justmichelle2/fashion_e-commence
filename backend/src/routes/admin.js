@@ -11,6 +11,12 @@ const {
 	adminUpdateOrder,
 	getOrderAuditTrail,
 } = require('../controllers/adminController');
+const {
+	listVipCatalog,
+	assignVipExperience,
+	listVipRequestsAdmin,
+	updateVipRequestStatus,
+} = require('../controllers/vipController');
 const { authMiddleware } = require('../utils/jwt');
 
 // All admin routes require auth + admin role
@@ -25,5 +31,9 @@ router.get('/orders', listAdminOrders);
 router.get('/orders/:id', getAdminOrder);
 router.patch('/orders/:id', adminUpdateOrder);
 router.get('/orders/:id/audit', getOrderAuditTrail);
+router.get('/vip/experiences', listVipCatalog);
+router.post('/vip/experiences', assignVipExperience);
+router.get('/vip/requests', listVipRequestsAdmin);
+router.post('/vip/requests/:id/status', updateVipRequestStatus);
 
 module.exports = router;

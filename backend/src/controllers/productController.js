@@ -2,6 +2,7 @@ const { Product, User } = require('../models');
 const { Op } = require('sequelize');
 const { upload } = require('../utils/upload');
 const { validate, schemas } = require('../utils/validators');
+const { normalizeCurrency } = require('../utils/currency');
 
 async function listProducts(req, res){
   const {
@@ -81,6 +82,15 @@ async function createProduct(req, res){
   const payload = { ...req.body }
   if(payload.priceCents !== undefined) payload.priceCents = Number(payload.priceCents)
 
+  if(payload.currency !== undefined){
+    const normalizedCurrency = normalizeCurrency(payload.currency)
+    if(!normalizedCurrency) return res.status(400).json({ error: 'Unsupported currency' })
+    payload.currency = normalizedCurrency
+  }else if(req.user?.preferredCurrency){
+    const normalizedPreferred = normalizeCurrency(req.user.preferredCurrency)
+    if(normalizedPreferred) payload.currency = normalizedPreferred
+  }
+
   const tags = extractArrayField(req, 'tags')
   if(tags !== undefined) payload.tags = tags
 
@@ -107,6 +117,11 @@ async function updateProduct(req, res){
 
   const payload = { ...req.body }
   if(payload.priceCents !== undefined) payload.priceCents = Number(payload.priceCents)
+  if(payload.currency !== undefined){
+    const normalizedCurrency = normalizeCurrency(payload.currency)
+    if(!normalizedCurrency) return res.status(400).json({ error: 'Unsupported currency' })
+    payload.currency = normalizedCurrency
+  }
   const tags = extractArrayField(req, 'tags')
   if(tags !== undefined) payload.tags = tags
 

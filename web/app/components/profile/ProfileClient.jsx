@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/navigation'
 import Container from '../ui/Container'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
 import AutoGrid from '../ui/AutoGrid'
 import Badge from '../ui/Badge'
 import { useSession } from '../../../components/SessionProvider'
+import { useLocale } from '@/components/LocaleProvider'
 
 const BASE_FIELDS = [
   { key: 'name', label: 'Full name', placeholder: 'Ama K.', type: 'text' },
@@ -18,20 +19,25 @@ const BASE_FIELDS = [
 
 export default function ProfileClient() {
   const router = useRouter()
+  const { locale } = useLocale()
   const { status, user, updateProfile } = useSession()
   const [form, setForm] = useState(() => mapUserToForm(user))
   const [message, setMessage] = useState(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [isEditing, setIsEditing] = useState(true)
+  const [redirecting, setRedirecting] = useState(false)
 
   useEffect(() => {
     setForm(mapUserToForm(user))
+    setIsEditing(true)
   }, [user])
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace(`/account/login?redirect=${encodeURIComponent('/profile')}`)
+      const profilePath = `/${locale}/profile`
+      router.replace(`/login?redirect=${encodeURIComponent(profilePath)}`)
     }
-  }, [status, router])
+  }, [status, router, locale])
 
   const isLoading = status === 'idle' || status === 'loading'
   const isAuthorized = status === 'authenticated'
@@ -54,6 +60,9 @@ export default function ProfileClient() {
         styleNotes: form.styleNotes,
       })
       setMessage({ type: 'success', text: 'Profile saved' })
+      setIsEditing(false)
+      setRedirecting(true)
+      router.push('/dashboard')
     } catch (err) {
       setMessage({ type: 'error', text: err.message || 'Unable to save profile' })
     } finally {
@@ -70,10 +79,10 @@ export default function ProfileClient() {
     [],
   )
 
-  if (isLoading) {
+  if (isLoading || redirecting) {
     return (
       <Container className="py-24 text-center text-muted">
-        Loading your profile…
+        {redirecting ? 'Profile saved — taking you to your dashboard…' : 'Loading your profile…'}
       </Container>
     )
   }
@@ -101,7 +110,7 @@ export default function ProfileClient() {
                 type={field.type}
                 value={form[field.key] || ''}
                 onChange={handleChange(field.key)}
-                disabled={!isAuthorized}
+                disabled={!isAuthorized || !isEditing || isSaving}
               />
             </label>
           ))}
@@ -114,7 +123,7 @@ export default function ProfileClient() {
               placeholder="Silhouettes, designers, fit notes"
               value={form.styleNotes || ''}
               onChange={handleChange('styleNotes')}
-              disabled={!isAuthorized}
+              disabled={!isAuthorized || !isEditing || isSaving}
             />
           </label>
 
@@ -126,9 +135,31 @@ export default function ProfileClient() {
             </p>
           )}
 
-          <Button type="submit" className="w-full justify-center" disabled={isSaving}>
-            {isSaving ? 'Saving…' : 'Save profile'}
-          </Button>
+          {isEditing ? (
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                className="w-full justify-center text-white sm:w-1/3"
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving…' : 'Save profile'}
+              </Button>
+            </div>
+          ) : (
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  setMessage(null)
+                  setIsEditing(true)
+                }}
+              >
+                Edit profile
+              </Button>
+            </div>
+          )}
         </Card>
 
         <div className="space-y-6">

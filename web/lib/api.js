@@ -67,4 +67,11 @@ export async function getCart(token) {
   })
 }
 
+export async function getCurrencies() {
+  return safeFetch('/api/currencies', {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+  })
+}
+
 export { API_BASE }

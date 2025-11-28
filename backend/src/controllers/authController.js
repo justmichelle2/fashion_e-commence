@@ -2,9 +2,25 @@ const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const { UniqueConstraintError, ValidationError } = require('sequelize');
 const config = require('../config/config');
+const { normalizeCurrency } = require('../utils/currency');
 
-const PROFILE_ATTRIBUTES = ['id', 'email', 'name', 'role', 'bio', 'verified', 'portfolioUrl', 'location', 'phoneNumber', 'styleNotes', 'pronouns', 'preferredLocale'];
-const MUTABLE_PROFILE_FIELDS = ['name', 'phoneNumber', 'location', 'styleNotes', 'pronouns', 'preferredLocale'];
+const PROFILE_ATTRIBUTES = [
+  'id',
+  'email',
+  'name',
+  'role',
+  'bio',
+  'verified',
+  'portfolioUrl',
+  'location',
+  'phoneNumber',
+  'styleNotes',
+  'pronouns',
+  'preferredLocale',
+  'preferredCurrency',
+  'notificationPrefs',
+];
+const MUTABLE_PROFILE_FIELDS = ['name', 'phoneNumber', 'location', 'styleNotes', 'pronouns', 'preferredLocale', 'preferredCurrency'];
 
 async function register(req, res) {
   try {
@@ -21,7 +37,18 @@ async function register(req, res) {
     await user.setPassword(password);
     await user.save();
     const token = jwt.sign({ id: user.id, role: user.role }, config.jwtSecret, { expiresIn: '30d' });
-    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role, preferredLocale: user.preferredLocale } });
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        preferredLocale: user.preferredLocale,
+        preferredCurrency: user.preferredCurrency,
+        notificationPrefs: user.notificationPrefs,
+      },
+    });
   } catch (err) {
     if (err instanceof UniqueConstraintError || err?.name === 'SequelizeUniqueConstraintError') {
       return res.status(400).json({ error: 'Email already used' });
@@ -43,7 +70,18 @@ async function login(req, res) {
     const ok = await user.validatePassword(password);
     if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
     const token = jwt.sign({ id: user.id, role: user.role }, config.jwtSecret, { expiresIn: '30d' });
-    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role, preferredLocale: user.preferredLocale } });
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        preferredLocale: user.preferredLocale,
+        preferredCurrency: user.preferredCurrency,
+        notificationPrefs: user.notificationPrefs,
+      },
+    });
   } catch (err) {
     console.error('Login failed', err);
     res.status(500).json({ error: 'Internal server error', details: err.message, stack: err.stack });
@@ -83,6 +121,14 @@ async function updateMe(req, res) {
 
     const user = await User.findByPk(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
+
+    if (Object.prototype.hasOwnProperty.call(payload, 'preferredCurrency')) {
+      const normalized = normalizeCurrency(payload.preferredCurrency);
+      if (!normalized) {
+        return res.status(400).json({ error: 'Unsupported currency' });
+      }
+      payload.preferredCurrency = normalized;
+    }
 
     Object.assign(user, payload);
     await user.save();

@@ -26,7 +26,7 @@ async function buildOrderSummary(){
 }
 
 async function listUsers(req, res){
-  const users = await User.findAll({ attributes: ['id','name','email','role','verified','createdAt'] });
+  const users = await User.findAll({ attributes: ['id','name','email','role','verified','createdAt','notificationPrefs'] });
   res.json({ users });
 }
 
